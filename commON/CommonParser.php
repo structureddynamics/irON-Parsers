@@ -1,5 +1,16 @@
 <?php
 
+	/*! @file CommonParser.php
+		 @brief commON parser implementation file
+		
+		 \n\n
+	 
+		 @author Frederick Giasson, Structured Dynamics LLC.
+
+		 \n\n\n
+	 */
+
+
 	/*!	 @brief commON serialization parsing class
 			 @details This class will parse a commON CSV file and parse it to extract commON instance records.
 							
@@ -18,12 +29,17 @@
 	*/	
 	class CommonParser
 	{
-		/*! @brief All CSV records extracted from the CSV file */
-		
-		/*
+		/*! @page internalDataStructures Internal Data Structures used by the commON Parser
 		 
-		 	The structure of this variable looks like:
+		 	@section CSVParserInternalParsedRecordsStructure CSV Parser Internal Parsed Records Structure
 		 	
+		 	@n
+		 	
+		 	The structure of the parsed CSV records is saved in the $csvRecords private member. Its content looks like:
+		 	
+		 	@n
+		 	
+		 	@verbatim
 			Array
 			(
 			    [0] => &&recordList
@@ -50,21 +66,34 @@
 			)
 		 	
 		 	...
+		 	@endverbatim
+
+		 	@n
 		 	
 		 	The "&&recordList" processor keyword tells the parser that a recordList is introduced.
 		 	
 		 	Then you have the CSV column structure that tels the parser how to recreate the key/value pairs
 		 	
 		 	And then you have a series of records.
-
-		 */
+		 	
+		 	@n
+		 	@n
+   	  	*/
+		
+		/*! @brief All CSV records extracted from the CSV file */
 		private $csvRecords = array();
 		
-		/*! @brief Array with all parsed commON records */
-		
-		/*
-		 	The structure looks like:
+		/*! @page internalDataStructures Internal Data Structures used by the commON Parser
+		 
+		 	@section CommonParserInternalParsedRecordsStructure Common Parser Internal Parsed Records Structure
 		 	
+		 	@n
+		 	
+		 	The parser commON records are saved in the $commonRecords private member. Its structure looks like:
+		 	
+		 	@n
+		 	
+		 	@verbatim
 			Array
 			(
 			    [0] => Array
@@ -122,21 +151,34 @@
 				...
 			
 			)
+			@endverbatim
+
+			@n
 			
 			Where the first array is an array of records. Then for each record item, you have a list of attributes. Each attribute
 			is a list of values. Then each value is an array with two keys: "value" and "reify". "value" is the value of the triple:
-			<record> <attribute> <value>. "reify" is an array of meta data (reifications) attribute/value pairs about the triple
+			"record" "attribute" "value". "reify" is an array of meta data (reifications) attribute/value pairs about the triple
 			statement.
+			
+			@n
+			@n
 		 	
 		*/
+		
+		/*! @brief Array with all parsed commON records */
 		private $commonRecords = array();
 		
-		/*! @brief Array describing the linkage schema (if defined) of a commON file */
-		
-		/*
+		/*! @page internalDataStructures Internal Data Structures used by the commON Parser
+		 
+		 	@section LinkageSchemaInternalStructure Linkage Schema Internal Structure
 
-			The structure of this variable looks like:
+			The Linkage Schema structure is used to map attributes and types used in a commON dataset to
+			external vocabularies/taxonomies/ontologies. This structure is saved in the $commonLinkageSchema
+			private member and looks like:
 			
+			@n
+			
+			@verbatim
 			Array
 			(
 			    [description] => Array
@@ -148,7 +190,7 @@
 			
 			            [&linkageType] => Array
 			                (
-			                    [0] => rdf
+			                    [0] => application/rdf+xml
 			                )
 			
 			        )
@@ -218,9 +260,11 @@
 			        )
 			
 			)
-			
-
+			...
+			@endverbatim
 		 */
+		
+		/*! @brief Array describing the linkage schema (if defined) of a commON file */
 		private $commonLinkageSchema = array();
 		
 		/*! @brief Parsing errors stack */
@@ -253,6 +297,8 @@
 				
 				@return returns an array of records.
 				
+				@see @ref CSVParserInternalParsedRecordsStructure
+				
 				@author Frederick Giasson, Structured Dynamics LLC.
 			
 				\n\n\n
@@ -269,6 +315,8 @@
 				
 				@return returns an array of commON records.
 				
+				@see @ref CommonParserInternalParsedRecordsStructure				
+				
 				@author Frederick Giasson, Structured Dynamics LLC.
 			
 				\n\n\n
@@ -283,6 +331,8 @@
 				\n
 				
 				@return returns an array of the parsed linkage schema
+				
+				@see @ref LinkageSchemaInternalStructure				
 				
 				@author Frederick Giasson, Structured Dynamics LLC.
 			
@@ -317,22 +367,24 @@
 								
 				\n
 				
+				@return returns NULL
+				
 				@author Frederick Giasson, Structured Dynamics LLC.
 			
 				\n\n\n
 		*/			
 		private function csvParser()
 		{
-			/*! @brief Index pointing to the begenning of a record in the CSV file string */
+			/* Index pointing to the begenning of a record in the CSV file string */
 			$startRecord = 0;
 
-			/*! @brief Index pointing to the end of a record in the CSV file string */
+			/* Index pointing to the end of a record in the CSV file string */
 			$endRecord = 0;
 
-			/*! @brief Tells the parser if we started to parse the CSV file */
+			/* Tells the parser if we started to parse the CSV file */
 			$start = TRUE;
 			
-			/*! @brief A single record that get extracted from the CSV file */
+			/* A single record that get extracted from the CSV file */
 			
 			/*
 				The structure of this record looks like:
@@ -366,14 +418,11 @@
 			 */
 			$record = array();
 			
-			/*! @brief Check if a string is in double quotes (necessary for proper escaping) */			
+			/* Check if a string is in double quotes (necessary for proper escaping) */			
 			$inDoubleQuotes = FALSE;
 			
 			// Remove all extra carrier return. We normalize with "\r"
 			$this->content = preg_replace("/[\r\n]+/", "\r", $this->content);
-			
-			// First initial and final spaces within double quotes to fix issues introduced by OpenOffice
-			$this->content = str_replace(array('" ', ' "'), '"', $this->content);
 			
 			for($i = 0; $i < strlen($this->content); $i++)
 			{
@@ -415,46 +464,22 @@
 					// If we are not in double quotes, we get everything until we reach a comma or a line break.
 					if(($this->content[$i] == "\n") || ($this->content[$i] == "\r") || ($this->content[$i] == "\r" && $this->content[$i+1] == "\n"))
 					{
-						// add the last value of the record
-						// remove ending space if existing
-						if($this->content[$i-1] == " ")
+						if($this->content[$i-1] == '"')
 						{
-							if($this->content[$i-2] == '"')
-							{
-								$endRecord = $i-2;
-							}
-							else
-							{
-								$endRecord = $i-1;
-							}
+							$endRecord = $i-1;
 						}
 						else
 						{
-							if($this->content[$i-1] == '"')
-							{
-								$endRecord = $i-1;
-							}
-							else
-							{
-								$endRecord = $i;
-							}
+							$endRecord = $i;
 						}
 						
 						array_push($record, str_replace('""', '"', substr($this->content, $startRecord, ($endRecord - $startRecord))));
 	
-						// remove leading space if existing
-						if($this->content[$i+1] == " ")
-						{					
-							$startRecord = $i+2;
-						}
-						else
-						{
-							$startRecord = $i+1;
-						}					
+						$startRecord = $i+1;
 	
 						
 						// Add this new record to the records list
-						array_push($this->commonRecords, $record);
+						array_push($this->csvRecords, $record);
 						$record = array();
 						
 						if($this->content[$i] == "\r" && $this->content[$i+1] == "\n")
@@ -464,41 +489,18 @@
 					}
 					elseif($this->content[$i] == ",")
 					{
-						// remove ending space if existing
-						if($this->content[$i-1] == " ")
+						if($this->content[$i-1] == '"')
 						{
-							if($this->content[$i-2] == '"')
-							{
-								$endRecord = $i-2;
-							}
-							else
-							{
-								$endRecord = $i-1;
-							}
+							$endRecord = $i-1;
 						}
 						else
 						{
-							if($this->content[$i-1] == '"')
-							{
-								$endRecord = $i-1;
-							}
-							else
-							{
-								$endRecord = $i;
-							}
+							$endRecord = $i;
 						}
 						
 						array_push($record, str_replace('""', '"', substr($this->content, $startRecord, ($endRecord - $startRecord))));
 						
-						// remove leading space if existing
-						if($this->content[$i+1] == " ")
-						{					
-							$startRecord = $i+2;
-						}
-						else
-						{
-							$startRecord = $i+1;
-						}
+						$startRecord = $i+1;
 					}
 					elseif($this->content[$i] == '"')
 					{
@@ -539,27 +541,29 @@
 								
 				\n
 				
+				@return returns NULL
+				
 				@author Frederick Giasson, Structured Dynamics LLC.
 			
 				\n\n\n
-		*/	
+		*/
 		private function commonParser()
 		{
-			/*! @brief Check what is the current section being processed: (1) record, (2) dataset or (3) linkage */			
+			/* Check what is the current section being processed: (1) record, (2) dataset or (3) linkage */
 			$currentSection = "";
 			
-			/*! @brief Reference on the current record being processed */			
+			/* Reference on the current record being processed */			
 			$currentRecord = "";
 			
-			/*! @brief A commON record description */			
+			/* A commON record description */			
 			$commonRecord = array();
 	
-			/*! @brief The record structure where to match commON record descriptions to their values */			
+			/* The record structure where to match commON record descriptions to their values */			
 			$recordStructure = array();
 
 			$shouldBeRecordDescription = FALSE;
 			
-			foreach($this->commonRecords as $record)
+			foreach($this->csvRecords as $record)
 			{
 				// Check for blank lines.
 				$blank = TRUE;
@@ -612,7 +616,7 @@
 					if($shouldBeRecordDescription)
 					{
 						$recordStructure = array();
-						
+
 						// Lets define the record structure for the next records to parse
 						foreach($record as $property)
 						{
@@ -627,6 +631,20 @@
 									array_push($this->errors, "commON Parser: A record structure property has been defined without starting with '&' ($property)");
 									return;
 								}
+							}
+							else
+							{
+								// If an empty column is defined for the structure section of a record, we
+								// add it in the $recordStructure array. We then consider that the data publisher
+								// needed it for its own spreadsheet layout.
+								
+								// This ensure that if "padding" empty-column is added to all records of the file, that it doesn't
+								// raise the "Too many properties defined for the record according to the linkage schema record structure"
+								// commON parsing error
+								
+								// Additionally this ensure a compatibility with some spreadsheet software such as Excel.
+								
+								array_push($recordStructure, "");
 							}
 						}
 						
@@ -662,6 +680,12 @@
 								
 								foreach($recordStructure as $key => $rs)
 								{
+									// We simply skip empty recordStructure columns.
+									if($rs == "")
+									{
+										continue;
+									}
+									
 									if($rs == "&id")
 									{
 										if($currentRecord != $record[$key] && $record[$key] != "")
@@ -714,7 +738,7 @@
 											}
 											else
 											{
-												if(is_array($commonRecord[$reifiedAttribute["attribute"]]["reify"]))
+												if(!is_array($commonRecord[$reifiedAttribute["attribute"]]["reify"]))
 												{
 													$commonRecord[$reifiedAttribute["attribute"]]["reify"] = array();
 												}
@@ -746,7 +770,7 @@
 										}
 										else
 										{
-											if(is_array($commonRecord[$rs]))
+											if(!is_array($commonRecord[$rs]))
 											{
 												$commonRecord[$rs] = array();
 											}
@@ -906,6 +930,242 @@
 			}
 			
 			return(FALSE);
+		}
+		
+		/*!	 @brief Generate a RDF file serialized in N3 by using the parsed commON records and the related linkage schema.
+					
+				@param[in] $baseInstance  Base URI of the instance records to be converted
+				@param[in] $baseOntology  Base URI of the ontology used to create new attributes and types. This is used
+														when there is nothing defined in the linkage schema for an attribute or type.
+								
+				\n
+				
+				@return return the serialized RDF file in N3
+				
+				@author Frederick Giasson, Structured Dynamics LLC.
+			
+				\n\n\n
+		*/	
+		public function getRdfN3($baseInstance, $baseOntology)
+		{
+			// Serialized file content
+			$n3 = "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n\n";
+			
+			// Serialization of reification statements to be happened to the $n3 file content.
+			$n3ReificationStatements = "";
+			
+			// Convert each record that have been converted
+			foreach($this->commonRecords as $record)
+			{
+				// Map ID & type
+				$type = array();
+				if(count($record["&type"]) == 0)
+				{
+					array_push($type, "http://www.w3.org/2002/07/owl#Thing");
+				}
+				elseif(count($record["&type"]) >= 1)
+				{
+					foreach($record["&type"] as $rt)
+					{
+						// check in the linkage file for the type
+						$t = $this->getLinkedType($rt["value"]);
+	
+						if($t == "")
+						{				
+							// If the type doesn't exist, we simply use the generic owl:Thing type	
+							array_push($type, "http://www.w3.org/2002/07/owl#Thing");
+						}
+						else
+						{
+							// Otherwise we use the linked type
+							array_push($type, $t);
+						}
+					}
+				}
+
+				// Get the ID f the record	
+				$recordId = $baseInstance.$record["&id"][0]["value"];
+	
+				// Serialize the type(s) used to define the record
+				if(count($type)  == 1)
+				{
+					$n3 .= "\n<".$recordId."> a <".$type[0]."> .\n";
+				}
+				else
+				{
+					$n3 .= "\n";
+					
+					foreach($type as $key => $t)
+					{
+						$n3 .= "<".$recordId."> a <$t> .\n";
+					}
+				}
+				
+				// Map properties / values of the record
+				foreach($record as $property => $values)
+				{
+					// Make sure we don't process twice the ID and the TYPE
+					if($property != "&id" && $property != "&type")
+					{
+						foreach($values as $value)
+						{
+							if($value != "")
+							{
+								// Check if this attribute is part of the linkage schema
+								$p = $this->getLinkedProperty($property);
+								
+								if($p == "")
+								{
+									// If the attribute to be converted is not part of the linakge schema, then we
+									// simply create a "on-the-fly" attribute by using the $baseOntology URI.
+									$p = $baseOntology.substr($property, 1, strlen($property) - 1);
+									
+									// @TODO: Check if "@" or "@@"
+									$n3 .= "<".$recordId."> <".$p."> \"\"\"".$this->escapeN3($value["value"])."\"\"\" .\n";
+								}
+								else
+								{
+									// @TODO: Check if "@" or "@@"
+									$n3 .= "<".$recordId."> <".$p."> \"\"\"".$this->escapeN3($value["value"])."\"\"\" .\n";
+								}
+								
+								// Check if there is some statements to reify
+								if(is_array($value["reify"]))
+								{
+									foreach($value["reify"] as $reifiedAttribute => $reiValues)
+									{
+										$rp = $this->getLinkedProperty($reifiedAttribute);
+										
+										// Create serialized reification statements that will be happened to the end of the record
+										// serialized file
+										// Reification re-use RDF's reification vocabulary: http://www.w3.org/TR/REC-rdf-syntax/#reification
+										
+										if($rp == "")
+										{
+											$reiProperty = $baseOntology.substr($reifiedAttribute, 1, strlen($reifiedAttribute) - 1);
+											
+											// @TODO: Check if "@" or "@@"								
+											foreach($reiValues as $reiValue)
+											{
+												$n3ReificationStatements .= "_:".md5($recordId.$p.$value["value"])." a rdf:Statement ;\n";
+		
+												$n3ReificationStatements .= "    rdf:subject <".$recordId."> ;\n";
+												$n3ReificationStatements .= "    rdf:predicate <".$p."> ;\n";
+												$n3ReificationStatements .= "    rdf:object \"\"\"".$this->escapeN3($value["value"])."\"\"\" ;\n";
+												$n3ReificationStatements .= "    <".$reiProperty."> \"\"\"".$this->escapeN3($reiValue)."\"\"\" .\n\n";
+											}
+										}
+										else
+										{
+											// @TODO: Check if "@" or "@@"
+											foreach($reiValues as $reiValue)
+											{
+												$n3ReificationStatements .= "_:".md5($recordId.$p.$value["value"])." a rdf:Statement ;\n";
+		
+												$n3ReificationStatements .= "    rdf:subject <".$recordId."> ;\n";
+												$n3ReificationStatements .= "    rdf:predicate <".$p."> ;\n";
+												$n3ReificationStatements .= "    rdf:object \"\"\"".$this->escapeN3($value["value"])."\"\"\" ;\n";
+												$n3ReificationStatements .= "    <".$rp."> \"\"\"".$this->escapeN3($reiValue)."\"\"\" .\n\n";
+											}										
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			return($n3.$n3ReificationStatements);
+		}
+		
+		/*!	 @brief Return the URI of the property that has been linked to a commON attribute by the Linkage Schema.
+					
+				@param[in] $targetAttribute Target attribute, from the commON file, that we try to link to an external vocabulary/schema/ontology 
+								
+				\n
+				
+				@return return the URI of the linked property, or an empty string if such a linked property doesn't exist.
+				
+				@author Frederick Giasson, Structured Dynamics LLC.
+			
+				\n\n\n
+		*/			
+		private function getLinkedProperty($targetAttribute)
+		{
+			// Remve the processing character if it is present at the beginning of the attr
+			if(substr($targetAttribute, 0, 1) == "&")
+			{
+				$targetAttribute = substr($targetAttribute, 1, strlen($targetAttribute) - 1);
+			}
+	
+			if(is_array($this->commonLinkageSchema["properties"]))
+			{		
+				foreach($this->commonLinkageSchema["properties"] as $property)
+				{
+					if($property["&attributeList"][0] == $targetAttribute)
+					{
+						return($property["&mapTo"][0]);
+					}
+				}
+			}
+
+			// Linked property not found, return an empty string			
+			return("");
+		}
+		
+		/*!	 @brief Return the URI of the type that has been linked to a commON type by the Linkage Schema.
+					
+				@param[in] $targetType Target type, from the commON file, that we try to link to an external vocabulary/schema/ontology 
+								
+				\n
+				
+				@return return the URI of the linked type, or an empty string if such a linked type doesn't exist.
+				
+				@author Frederick Giasson, Structured Dynamics LLC.
+			
+				\n\n\n
+		*/			
+		private function getLinkedType($targetType)
+		{
+			// Remve the processing character if it is present at the beginning of the attr
+			if(substr($targetType, 0, 1) == "&")
+			{
+				$targetType = substr($targetType, 1, strlen($targetType) - 1);
+			}			
+			
+			if(is_array($this->commonLinkageSchema["types"]))
+			{			
+				foreach($this->commonLinkageSchema["types"] as $type)
+				{
+					if($type["&typeList"][0] == $targetType)
+					{
+						return($type["&mapTo"][0]);
+					}
+				}
+			}
+			
+			// Linked type not found, return an empty string						
+			return("");
+		}		
+		
+		/*!	 @brief Apply N3 serialization escaping rules to a literal
+					
+				@param[in] $literal Literal to be escaped 
+								
+				\n
+				
+				@return return the N3 escaped literal ready to be used in a N3 serialized file.
+				
+				@author Frederick Giasson, Structured Dynamics LLC.
+			
+				\n\n\n
+		*/			
+		private function escapeN3($literal)
+		{
+			$literal = str_replace("\\","\\\\", $literal);
+			
+			return str_replace(array('"', "'"), array('\\"', "\\'"), $literal);
 		}
 		
 	}
