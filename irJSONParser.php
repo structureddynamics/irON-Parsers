@@ -1,10 +1,9 @@
 <?php
 
+
 /*!	 @brief JSON parsing class
 						
 		\n
-		
-		@todo Implementing the "metaFile" keyword
 		
 		@author Frederick Giasson, Structured Dynamics LLC.
 	
@@ -13,136 +12,174 @@
 
 class irJSONParser
 {
-	/*! @brief Array of instance record objects of the parsed irJSON file */			
-	public $instanceRecords  = array();
+    /*! @brief Array of instance record objects of the parsed irJSON file */                        
+    public $instanceRecords  = array();
 
-	/*! @brief Array of Linkage Schema objects of the parsed irJSON file */			
-	public $linkageSchemas = array();
+    /*! @brief Array of Linkage Schema objects of the parsed irJSON file */                 
+    public $linkageSchemas = array();
 
-	/*! @brief Array of Structure Schema objects of the parsed irJSON file */			
-	public $structureSchemas = array();
-	
-	/*! @brief Dataset object of the parsed irJSON file */			
-	public $dataset;
-	
-	/*! @brief JSON Parsing errors */			
-	public $jsonErrors = array();
+    /*! @brief Array of Structure Schema objects of the parsed irJSON file */                       
+    public $structureSchemas = array();
+    
+    /*! @brief Dataset object of the parsed irJSON file */                  
+    public $dataset;
+    
+    /*! @brief JSON Parsing errors */                       
+    public $jsonErrors = array();
 
-	/*! @brief irJSON Parsing errors */			
-	public $irjsonErrors = array();
-	
-	/*! @brief irJSON Parsing notices */			
-	public $irjsonNotices = array();
-	
-	/*! @brief irJSON content file to be parsed */			
-	private $jsonContent = "";
-	
-	/*! @brief Default Structure Schema used by the irJSON Parser */			
-	private $irvStructureSchema = "{
-										\"schema\": {
-											\"version\": \"0.1\",
+    /*! @brief irJSON Parsing errors */                     
+    public $irjsonErrors = array();
+    
+    /*! @brief irJSON Parsing notices */                    
+    public $irjsonNotices = array();
+    
+    /*! @brief irJSON content file to be parsed */                  
+    private $jsonContent = "";
+    
+    /*! @brief Default Structure Schema used by the irJSON Parser */        
+	private $irvStructureSchema = '{
+										"schema": {
+											"version": "0.1",
 											
-											\"attributeList\": {
-												\"id\": {
-													\"valueType\": \"string\"
+											"attributeList": {
+											
+												"id": {
+													"allowedValue": "String",
+													
+													"maxValues": "1"
 												},
-												\"prefLabel\": {
-													\"valueType\": \"string\"
+												"type": {
+													"allowedValue": "Object"
 												},
-												\"altLabel\": {
-													\"valueType\": [\"string\", \"array(string)\"]
+												"ref": {
+													"allowedValue": "String",
+													
+													"maxValues": "1"													
 												},
-												\"description\": {
-													\"valueType\": \"string\"
+
+												
+												"prefLabel": {
+													"allowedValue": "String",
+													
+													"maxValues": "1"
 												},
-												\"source\": {
-													\"valueType\": [\"object\", \"array(object)\"]
+												"altLabel": {
+													"allowedValue": "String",
+
+													"maxValues": "1"
 												},
-												\"createDate\": {
-													\"valueType\": \"string\",
-													\"format\": \"date\"
+												"description": {
+													"allowedValue": "String",
+
+													"maxValues": "1"
 												},
-												\"creator\": {
-													\"valueType\": [\"object\", \"array(object)\"]
+												"prefURL": {
+													"allowedValue": "String",
+													
+													"format": "url"
 												},
-												\"curator\": {
-													\"valueType\": [\"object\", \"array(object)\"]
+												
+												"createDate": {
+													"allowedValue": "String",
+													
+													"format": "date"
 												},
-												\"maintainer\": {
-													\"valueType\": [\"object\", \"array(object)\"]
+												"source": {
+													"allowedValue": "Object"
 												},
-												\"linkage\": {
-													\"valueType\": \"array(string)\"
+												"creator": {
+													"allowedValue": "Object"
 												},
-												\"schema\": {
-													\"valueType\": \"string\"
+												"curator": {
+													"allowedValue": "Object"
 												},
-												\"valueType\": {
-													\"valueType\": [\"string\", \"array(string)\"]
+												"maintainer": {
+													"allowedValue": "Object"
 												},
-												\"prefURL\": {
-													\"valueType\": \"string\",
-													\"format\": \"url\"
+												
+												"linkage": {
+													"allowedValue": "String"
 												},
-												\"ref\": {
-													\"valueType\": \"string\"
+												"schema": {
+													"allowedValue": "String"
 												},
-												\"version\": {
-													\"valueType\": \"string\"
+												
+												"allowedValue": {
+													"allowedValue": "String"
 												},
-												\"linkedType\": {
-													\"valueType\": \"string\"
+												"allowedType": {
+													"allowedValue": "String"
 												},
-												\"prefixList\": {
-													\"valueType\": \"object\"
+												"minValues": {
+													"allowedValue": "String"
 												},
-												\"attributeList\": {
-													\"valueType\": \"object\"
+												"maxValues": {
+													"allowedValue": "String"
 												},
-												\"typeList\": {
-													\"valueType\": \"object\"
+												"requiredAttribute": {
+													"allowedValue": "String"
 												},
-												\"format\": {
-													\"valueType\": \"string\"
+												"orderedValues": {
+													"allowedValue": "String"
+												},
+												
+												
+												"version": {
+													"allowedValue": "String",
+													
+													"maxValues": "1"													
+												},
+												"linkedType": {
+													"allowedValue": "String",
+													
+													"maxValues": "1"													
+												},
+												"prefixList": {
+													"allowedValue": "Object"
+												},
+												"attributeList": {
+													"allowedValue": "Object"
+												},
+												"typeList": {
+													"allowedValue": "Object"
+												},
+												"format": {
+													"allowedValue": "String"
 												},			
-												\"mapTo\": {
-													\"valueType\": \"string\"
+												"mapTo": {
+													"allowedValue": "String"
 												},		
-												\"add\": {
-													\"valueType\": \"string\"
+												"addMapping": {
+													"allowedValue": "Object"
 												},	
-												\"subPropertyOf\": {
-													\"valueType\": \"string\"
+												"subPropertyOf": {
+													"allowedValue": "Object"
 												},			
-												\"equivalentPropertyTo\": {
-													\"valueType\": \"string\"
+												"equivalentPropertyTo": {
+													"allowedValue": "Object"
 												},			
-												\"subTypeOf\": {
-													\"valueType\": \"string\"
+												"subTypeOf": {
+													"allowedValue": "Object"
 												},			
-												\"equivalentTypeTo\": {
-													\"valueType\": \"string\"
-												},
-												\"type\": {
-													\"valueType\": \"string\"
+												"equivalentTypeTo": {
+													"allowedValue": "Object"
 												}
 											}
 										}
-									}";
+									}';
 
-	/*!	 @brief Constructor. It takes the irJSON file content as input.
-							
-			\n
-			
-			@param[in] $content irJSON file content
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/	
+    /*!      @brief Constructor. It takes the irJSON file content as input.
+                                                    
+                    \n
+                    
+                    @param[in] $content irJSON file content
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */ 
 	function __construct($content) 
 	{
-		// Parse the JSON content
 		$this->jsonContent = json_decode($content);
 		
 	    if (strnatcmp(phpversion(),'5.3.0') >= 0)
@@ -182,14 +219,16 @@ class irJSONParser
 		}
 	}
 	
-	/*!	 @brief Parser function that parse the JSON file to populate the irJSON objects
-							
-			\n
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/		
+	function __destruct(){}
+	
+    /*!      @brief Parser function that parse the JSON file to populate the irJSON objects
+                                                    
+                    \n
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */ 	
 	private function parse() 
 	{
 		// Populate the Dataset object
@@ -202,103 +241,67 @@ class irJSONParser
 		}
 		else
 		{
-			array_push($this->irjsonErrors, "Dataset ID not specified");
+			array_push($this->irvErrors, "Dataset ID not specified");
 		}
 		
-		// Set label
-		if(is_array($this->jsonContent->dataset->prefLabel))
+		// Set attributes
+		foreach($this->jsonContent->dataset as $attribute => $value)
 		{
-			foreach($this->jsonContent->dataset->prefLabel as $label)
+			if($attribute != "id" && $attribute != "type" && $attribute != "linkage" && $attribute != "schema")
 			{
-				$this->dataset->setLabel($label, "string");
-				array_push($this->irjsonNotices, "Attribute 'prefLabel' can't have an array as value. First item of the array is used as the string for label, other items are ignored.");
-				
-				break;	
-			}
-		}
-		else
-		{
-			$this->dataset->setLabel($this->jsonContent->dataset->prefLabel, "string");
-		}
-		
-		// set Meta
-		if(isset($this->jsonContent->dataset->meta))
-		{
-			array_push($this->irjsonErrors, "Attribute 'meta' not currently supported. Ignored.");
+				// Check if we have an array of something
+				if(is_array($this->jsonContent->dataset->{$attribute}))
+				{
+					foreach($this->jsonContent->dataset->{$attribute} as $arrayValue)
+					{
+						if(gettype($arrayValue) == "string")
+						{
+							$this->dataset->setAttribute($attribute, $arrayValue, "primitive:string[".count($this->jsonContent->dataset->{$attribute})."]");
+						}
+						
+						if(gettype($arrayValue) == "object")
+						{
+							// Create the metaData array
+							$metaData = array();
+							foreach($arrayValue as $metaAttribute => $metaValue)
+							{
+								if($metaAttribute != "ref")
+								{
+									array_push($metaData, array($metaAttribute => $metaValue));
+								}
+							}
+							
+							$this->dataset->setAttributeRef($attribute, $metaData, $arrayValue->ref, "type:object[".$this->jsonContent->dataset->{$attribute}."]");
+						}
+					}		
+				}
+				else
+				{
+					if(gettype($value) == "string")
+					{
+						$this->dataset->setAttribute($attribute, $value, "primitive:string[1]");							
+					}
+					
+					if(gettype($value) == "object")
+					{
+						// Create the metaData array
+						$metaData = array();
+						foreach($value as $metaAttribute => $metaValue)
+						{
+							if($metaAttribute != "ref")
+							{
+								array_push($metaData, array($metaAttribute => $metaValue));
+							}
+						}
+												
+						$this->dataset->setAttributeRef($attribute, $metaData, $value->ref, "type:object[1]");
+					}
+				}
+			}	
 		}
 
-		// Set altLabel
-		if(is_array($this->jsonContent->dataset->altLabel))
-		{
-			foreach($this->jsonContent->dataset->altLabel as $altLabel)
-			{
-				$this->dataset->setAltLabel($altLabel, "array(string)");	
-			}
-		}
-		else
-		{
-			$this->dataset->setAltLabel($this->jsonContent->dataset->altLabel, "string");
-		}		
-		
-		// Set description
-		$this->dataset->setDescription($this->jsonContent->dataset->description);
-				
-		// Set sources		
-		if(is_array($this->jsonContent->dataset->source))
-		{
-			foreach($this->jsonContent->dataset->source as $source)
-			{
-				$this->dataset->setSource($source->prefLabel, $source->prefURL, $source->ref, "array(object)");	
-			}		
-		}
-		else
-		{
-			$this->dataset->setSource($this->jsonContent->dataset->source->prefLabel, $this->jsonContent->dataset->source->prefURL, $this->jsonContent->dataset->source->ref, "object");
-		}
 
-
-		// Set createDate
-		$this->dataset->setCreateDate($this->jsonContent->dataset->createDate);		
-
-		// Set creator		
-		if(is_array($this->jsonContent->dataset->creator))
-		{
-			foreach($this->jsonContent->dataset->creator as $creator)
-			{
-				$this->dataset->setCreator($creator->prefLabel, $creator->prefURL, $creator->ref, "array(object)");	
-			}		
-		}
-		else
-		{
-			$this->dataset->setCreator($this->jsonContent->dataset->creator->prefLabel, $this->jsonContent->dataset->creator->prefURL, $this->jsonContent->dataset->creator->ref, "object");
-		}
-
-		// Set curator		
-		if(is_array($this->jsonContent->dataset->curator))
-		{
-			foreach($this->jsonContent->dataset->curator as $curator)
-			{
-				$this->dataset->setCurator($curator->prefLabel, $curator->prefURL, $curator->ref, "array(object)");	
-			}		
-		}
-		else
-		{
-			$this->dataset->setCurator($this->jsonContent->dataset->curator->prefLabel, $this->jsonContent->dataset->curator->prefURL, $this->jsonContent->dataset->curator->ref, "object");
-		}
-		
-		// Set maintainer		
-		if(is_array($this->jsonContent->dataset->maintainer))
-		{
-			foreach($this->jsonContent->dataset->maintainer as $maintainer)
-			{
-				$this->dataset->setMaintainer($maintainer->prefLabel, $maintainer->prefURL, $maintainer->ref, "array(object)");	
-			}		
-		}
-		else
-		{
-			$this->dataset->setMaintainer($this->jsonContent->dataset->maintainer->prefLabel, $this->jsonContent->dataset->maintainer->prefURL, $this->jsonContent->dataset->maintainer->ref, "object");
-		}		
-		
+/*		
 		// Structured Schema
 		
 		// Load the internal structure schema in the schemas array.
@@ -316,23 +319,23 @@ class irJSONParser
 		array_push($structureSchemas, $parsedContent);
 		
 		
-		if(isset($this->jsonContent->dataset->schema))
+		if(isset($this->jsonContent->dataset->structureSchema))
 		{
-			array_push($structureSchemas, $this->jsonContent->dataset->schema);
+			array_push($structureSchemas, $this->jsonContent->dataset->structureSchema);
 		}
 		
 		// Get the decoded schema
-		if(gettype($this->jsonContent->dataset->schema) != "object")
+		if(gettype($this->jsonContent->dataset->structureSchema) != "object")
 		{
 			// It is a URL link to a linkage schema
-			if(isset($this->jsonContent->dataset->schema))
+			if(isset($this->jsonContent->dataset->structureSchema))
 			{
 				// Save the URL reference
-				$this->dataset->setStructureSchema($this->jsonContent->dataset->schema);
+				$this->dataset->setStructureSchema($this->jsonContent->dataset->structureSchema);
 				
 				$ch = curl_init();
 				
-				curl_setopt($ch, CURLOPT_URL, $this->jsonContent->dataset->schema);
+				curl_setopt($ch, CURLOPT_URL, $this->jsonContent->dataset->structureSchema);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 				
@@ -341,7 +344,7 @@ class irJSONParser
 				
 				if(curl_errno($ch)) 
 				{
-					array_push($this->irjsonNotices, "Cannot access the structure schema from: ".$this->jsonContent->dataset->schema." - Ignored");
+					array_push($this->irvNotices, "Cannot access the structure schema from: ".$this->jsonContent->dataset->structureSchema." - Ignored");
 					
 					curl_close($ch);
 				}
@@ -355,7 +358,7 @@ class irJSONParser
 	
 					if($parsedContent === NULL)
 					{
-						array_push($this->jsonErrors, "Syntax error while parsing structure schema '".$this->jsonContent->dataset->schema."', malformed JSON");
+						array_push($this->jsonErrors, "Syntax error while parsing structure schema '".$this->jsonContent->dataset->structureSchema."', malformed JSON");
 						
 						return FALSE;		
 					}
@@ -366,34 +369,34 @@ class irJSONParser
 		}
 		else
 		{
-			if(isset($this->jsonContent->dataset->schema))
+			if(isset($this->jsonContent->dataset->structureSchema))
 			{
-				array_push($structureSchemas, $this->jsonContent->dataset->schema);
+				array_push($structureSchemas, $this->jsonContent->dataset->structureSchema);
 			}
 		}		
 		
 		// Now populate the schema object.
 		foreach($structureSchemas as $structureSchema)
 		{
-			$structureSchema = $structureSchema->schema;
+			$structureSchema = $structureSchema->structureSchema;
 			$tempSchema = new StructureSchema();
 			
 			// Set version
 			$tempSchema->setVersion($structureSchema->version);			
 
 			// Set properties structureSchemas
-			if(isset($structureSchema->attributeList))
+			if(isset($structureSchema->properties))
 			{
-				foreach($structureSchema->attributeList as $property => $values)
+				foreach($structureSchema->properties as $property => $values)
 				{
-					$tempSchema->setPropertyX($property, $values->valueType, $values->format, $values->equivalentPropertyTo, $values->subPropertyOf);
+					$tempSchema->setPropertyX($property, $values->type, $values->format, $values->equivalentPropertyTo, $values->subPropertyOf);
 				}
 			}
 			
 			// Set types
-			if(isset($structureSchema->typeList))
+			if(isset($structureSchema->types))
 			{
-				foreach($structureSchema->typeList as $type => $values)
+				foreach($structureSchema->types as $type => $values)
 				{
 					$tempSchema->setTypeX($type, $values->mapTo, $values->equivalentTypeTo, $values->subTypeOf);
 				}
@@ -401,7 +404,8 @@ class irJSONParser
 
 			array_push($this->structureSchemas, $tempSchema);
 		}
-		
+*/		
+
 		// Linkage Schemas
 		$linkageSchemas = array();
 
@@ -411,14 +415,14 @@ class irJSONParser
 			// It is a URL link to a linkage schema
 			if(isset($this->jsonContent->dataset->linkage))
 			{
-				$data;
-
 				foreach($this->jsonContent->dataset->linkage as $ls)
 				{
+					$data = "";
+					
 					if(gettype($ls) != "object")
 					{
 						// It is a URL
-						
+
 						// Save the URL reference
 						$this->dataset->setLinkageSchema($ls);
 						
@@ -432,7 +436,7 @@ class irJSONParser
 						
 						if(curl_errno($ch) || $data == "") 
 						{
-							array_push($this->irjsonNotices, "Cannot access the linkage schema from: $ls - Ignored");
+							array_push($this->irvNotices, "Cannot access the linkage schema from: $ls - Ignored");
 							curl_close($ch);
 							continue;
 						}
@@ -446,20 +450,78 @@ class irJSONParser
 						// It is an embedded linkage schema.
 						array_push($linkageSchemas, $ls);
 					}
-				}
-
-				if($data != "")
-				{
-					$parsedContent = json_decode($data);
-	
-					if($parsedContent === NULL)
+					
+					if($data != "")
 					{
-						array_push($this->jsonErrors, "Syntax error while parsing core linkage schema '".$url."', malformed JSON");
+						$parsedContent = json_decode($data);
+		
+						if($parsedContent === NULL)
+						{
+							array_push($this->jsonErrors, "Syntax error while parsing core linkage schema '".$ls."', malformed JSON");
+							
+							return FALSE;		
+						}
 						
-						return FALSE;		
-					}
-	
-					array_push($linkageSchemas, $parsedContent);
+						// Check if a linkage schema of the same linkageType exists. If it exists, we merge them together.
+						
+						// Merging rules:
+						// (1) if a type already exists, the type of the first schema will be used
+						// (2) if an attribute already exists, the attribute of the first schema will be used.
+						
+						$parsedContent = $parsedContent->linkage;
+						
+						$merged = FALSE;
+						
+						foreach($linkageSchemas as $linkageSchema)
+						{
+							if($linkageSchema->linkageType == $parsedContent->linkageType)
+							{
+								// merge prefixes
+								if(isset($parsedContent->prefixList))
+								{
+									foreach($parsedContent->prefixList as $prefix => $uri)
+									{
+										if(!isset($linkageSchema->prefixList->{$prefix}))
+										{
+											$linkageSchema->prefixList->{$prefix} = $uri;
+										}
+									}
+								}
+								
+								// merge types
+								if(isset($parsedContent->typeList))
+								{
+									foreach($parsedContent->typeList as $type => $typeObject)
+									{
+										if(!isset($linkageSchema->typeList->{$type}))
+										{
+											$linkageSchema->typeList->{$type} = $typeObject;
+										}
+									}
+								}
+								
+								// merge attributes
+								if(isset($parsedContent->attributeList))
+								{
+									foreach($parsedContent->attributeList as $attribute => $attributeObject)
+									{
+										if(!isset($linkageSchema->attributeList->{$attribute}))
+										{
+											$linkageSchema->attributeList->{$attribute} = $attributeObject;
+										}
+									}
+								}
+							}
+							
+							$merged = TRUE;
+						}
+						
+						if(!$merged)
+						{
+							array_push($linkageSchemas, $parsedContent);
+						}
+					}					
+					
 				}
 			}
 		}
@@ -470,8 +532,8 @@ class irJSONParser
 				array_push($linkageSchemas, $this->jsonContent->dataset->linkage);
 			}
 		}
-		
-		// Now populate the linkage schema object.
+
+		// Now populate the schema object.
 		foreach($linkageSchemas as $linkageSchema)
 		{
 			$tempSchema = new LinkageSchema();
@@ -484,22 +546,22 @@ class irJSONParser
 			
 			// Set prefixes
 			if(isset($linkageSchema->prefixList))
-			{
+			{			
 				foreach($linkageSchema->prefixList as $prefix => $uri)
 				{
 					$tempSchema->setPrefix($prefix, $uri);
-				}
+				}			
 			}
 			
-			// Set propertieslinkageSchemas
+			// Set attributes
 			if(isset($linkageSchema->attributeList))
-			{
+			{			
 				foreach($linkageSchema->attributeList as $property => $values)
 				{
 					// Throw an error if mapTo is used without specifying a linkedType attribute.
 					if(!isset($linkageSchema->linkedType) && isset($values->mapTo))
 					{
-						array_push($this->irjsonErrors, "A 'linkedType' attribute has to be defined for this schema since the 'mapTo' attribute is used in the schema.");					
+						array_push($this->irvErrors, "A 'linkedType' attribute has to be defined for this schema since the 'mapTo' attribute is used in the schema.");					
 					}
 					
 					$error = "";
@@ -508,7 +570,7 @@ class irJSONParser
 					
 					if($error != "")
 					{
-						array_push($this->irjsonErrors, $error);
+						array_push($this->irvErrors, $error);
 					}
 				}
 			}
@@ -534,11 +596,11 @@ class irJSONParser
 					
 					if($error != "")
 					{
-						array_push($this->irjsonErrors, $error);
+						array_push($this->irvErrors, $error);
 					}
 				}
 			}
-			
+
 			array_push($this->linkageSchemas, $tempSchema);
 		}
 
@@ -559,74 +621,31 @@ class irJSONParser
 				$instanceRecord->setId(md5(microtime()));
 			}
 
-			// Set type
+			// Set default type in case that no type has been defined for this record
 			if(isset($ir->type))
 			{
 				if(is_array($ir->type))
 				{
 					foreach($ir->type as $type)
 					{
-						$instanceRecord->setType($type, "array(string)");	
+						$instanceRecord->setAttribute("type", $type, "type:object[".count($ir->type)."]");
 					}
 				}
 				else
 				{
-					$instanceRecord->setType($ir->type, "string");
+					$instanceRecord->setAttribute("type", $ir->type, "type:object[1]");
 				}
 			}
 			else
 			{
-				$instanceRecord->setType("thing", "string");
+				$instanceRecord->setAttribute("type", "Object", "type:object[1]");
 			}
 			
-			// Set label
-			if(is_array($ir->prefLabel))
-			{
-				foreach($ir->prefLabel as $label)
-				{
-					$instanceRecord->setLabel($label, "string");
-					array_push($this->irjsonNotices, "Attribute 'prefLabel' can't have an array as value. First item of the array is used as the string for label, other items are ignored.");
-					break;	
-				}
-			}
-			else
-			{
-				$instanceRecord->setLabel($ir->prefLabel, "string");
-			}
-
-			// set Meta
-			if(isset($ir->meta))
-			{
-				array_push($this->irjsonNotices, "Attribute 'meta' not currently supported. Ignored.");
-			}
-
-			// Set altLabel
-			if(is_array($ir->altLabel))
-			{
-				foreach($ir->altLabel as $altLabel)
-				{
-					$instanceRecord->setAltLabel($altLabel, "array(string)");	
-				}
-			}
-			else
-			{
-				$instanceRecord->setAltLabel($ir->altLabel, "string");
-			}
-
-			
-			// Set description
-			$instanceRecord->setDescription($ir->description);
-			
-			// Set attributeX
+			// Set attributes
 			foreach($ir as $attribute => $value)
 			{
-				if(	$attribute != "id" &&
-					$attribute != "type" &&
-					$attribute != "prefLabel" &&
-					$attribute != "altLabel" &&
-					$attribute != "description")
+				if($attribute != "id" && $attribute != "type")
 				{
-
 					// Check if we have an array of something
 					if(is_array($ir->{$attribute}))
 					{
@@ -634,12 +653,21 @@ class irJSONParser
 						{
 							if(gettype($arrayValue) == "string")
 							{
-								$instanceRecord->setAttributeX($attribute, $arrayValue, "array(string)");
+								$instanceRecord->setAttribute($attribute, $arrayValue, "primitive:string[".count($ir->{$attribute})."]");
 							}
 							
 							if(gettype($arrayValue) == "object")
 							{
-								$instanceRecord->setAttributeXRef($attribute, $arrayValue->prefLabel, $arrayValue->prefURL, $arrayValue->ref, "array(object)");
+								// Create the metaData array
+								$metaData = array();
+								foreach($arrayValue as $metaAttribute => $metaValue)
+								{
+									if($metaAttribute != "ref")
+									{
+										array_push($metaData, array($metaAttribute => $metaValue));
+									}
+								}
+								$instanceRecord->setAttributeRef($attribute, $metaData, $arrayValue->ref, "type:object[".$ir->{$attribute}."]");
 							}
 						}		
 					}
@@ -647,12 +675,21 @@ class irJSONParser
 					{
 						if(gettype($value) == "string")
 						{
-							$instanceRecord->setAttributeX($attribute, $value, "string");							
+							$instanceRecord->setAttribute($attribute, $value, "primitive:string[1]");							
 						}
 						
 						if(gettype($value) == "object")
 						{
-							$instanceRecord->setAttributeXRef($attribute, $value->prefLabel, $value->prefURL, $value->ref, "object");
+							$metaData = array();
+							foreach($value as $metaAttribute => $metaValue)
+							{
+								if($metaAttribute != "ref")
+								{
+									array_push($metaData, array($metaAttribute => $metaValue));
+								}
+							}
+							
+							$instanceRecord->setAttributeRef($attribute, $metaData, $value->ref, "type:object[1]");
 						}
 					}
 				}	
@@ -660,6 +697,9 @@ class irJSONParser
 
 			array_push($this->instanceRecords, $instanceRecord);
 		}
+		
+		
+/*		
 		
 		// Now lets validate the types of the values of the attributes that have been parsed.
 			
@@ -683,10 +723,10 @@ class irJSONParser
 				if($structureSchema->getPropertyTypes($property) !== FALSE)
 				{
 					$defined = TRUE;
-					foreach($structureSchema->getPropertyTypes($property) as $valueType)
+					foreach($structureSchema->getPropertyTypes($property) as $type)
 					{
 						// array(object) and object; and; array(string) and string are the same types
-						$t = $valueType;
+						$t = $type;
 						
 						if(strpos($t, "array") !== FALSE)
 						{
@@ -707,7 +747,7 @@ class irJSONParser
 							break;
 						}
 					
-						array_push($possibleTypes, $valueType);
+						array_push($possibleTypes, $type);
 					}
 				}
 				
@@ -717,13 +757,13 @@ class irJSONParser
 			if($validType === FALSE && $defined === TRUE)
 			{
 				// The type of the value is not valid according to the structure schemas.
-				array_push($this->irjsonErrors, "Dataset property '".$property."' with value type '".$this->dataset->getValueType($property)."' is not valid according to the definition of the structure schema (should be one of: ".$this->listTypes($possibleTypes)." )");					
+				array_push($this->irvErrors, "Dataset property '".$property."' with value type '".$this->dataset->getValueType($property)."' is not valid according to the definition of the structure schema (should be one of: ".$this->listTypes($possibleTypes)." )");					
 			}
 				
 			if($defined === FALSE)
 			{
 				// The type of the value is not valid according to the structure schemas.
-				array_push($this->irjsonNotices, "Dataset property '".$property."' used without being part of the core structure schema.)");					
+				array_push($this->irvNotices, "Dataset property '".$property."' used without being part of the core structure schema.)");					
 			}	
 		}
 		
@@ -733,7 +773,7 @@ class irJSONParser
 		{
 			foreach($instanceRecord as $attribute => $value)
 			{
-				if($attribute == "attributeList")
+				if($attribute == "attributeX")
 				{
 					foreach($value as $attr => $val)
 					{
@@ -758,19 +798,20 @@ class irJSONParser
 				}
 			}	
 		}
+*/		
 	}
 	
-	/*!	 @brief Validate an attribute type based on the structure schema linked to the dataset.
-							
-			\n
-			
-			@param[in] $instanceRecord Instance record to validate
-			@param[in] $attribute Attribute name to validate
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/		
+    /*!      @brief Validate an attribute type based on the structure schema linked to the dataset.
+                                                    
+                    \n
+                    
+                    @param[in] $instanceRecord Instance record to validate
+                    @param[in] $attribute Attribute name to validate
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */   	
 	private function validateAttributeType(&$instanceRecord, $attribute)
 	{
 		$possibleTypes = array();
@@ -783,10 +824,10 @@ class irJSONParser
 			if($structureSchema->getPropertyTypes($attribute) !== FALSE)
 			{
 				$defined = TRUE;
-				foreach($structureSchema->getPropertyTypes($attribute) as $valueType)
+				foreach($structureSchema->getPropertyTypes($attribute) as $type)
 				{
 					// array(object) and object; and; array(string) and string are the same types
-					$t = $valueType;
+					$t = $type;
 					
 					if(strpos($t, "array") !== FALSE)
 					{
@@ -807,7 +848,7 @@ class irJSONParser
 						break;
 					}
 						
-					array_push($possibleTypes, $valueType);
+					array_push($possibleTypes, $type);
 				}		
 			}
 			
@@ -817,29 +858,29 @@ class irJSONParser
 		if($validType === FALSE && $defined === TRUE)
 		{
 			// The type of the value is not valid according to the structure schemas.
-			array_push($this->irjsonErrors, "Instance record attribute '".$attribute."' with value type '".$instanceRecord->getValueType($attribute)."' is not valid according to the definition of the structure schema (should be one of: ".$this->listTypes($possibleTypes)." )");
+			array_push($this->irvErrors, "Instance record attribute '".$attribute."' with value type '".$instanceRecord->getValueType($attribute)."' is not valid according to the definition of the structure schema (should be one of: ".$this->listTypes($possibleTypes)." )");
 		}
 		
 		if($defined === FALSE)
 		{
 			// The type of the value is not valid according to the structure schemas.
-			array_push($this->irjsonNotices, "Instance record attribute '".$attribute."' used without being part of the structure schema.)");					
+			array_push($this->irvNotices, "Instance record attribute '".$attribute."' used without being part of the structure schema.)");					
 		}	
 		
 		
 		return($validType);				
 	}
 	
-	/*!	 @brief List all types of a types list and seperate each item with a comma.
-							
-			\n
-			
-			@param[in] $types An array of type names
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/		
+    /*!      @brief List all types of a types list and seperate each item with a comma.
+                                                    
+                    \n
+                    
+                    @param[in] $types An array of type names
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */              	
 	private function listTypes($types)
 	{
 		$typeStr = "";

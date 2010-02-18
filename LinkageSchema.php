@@ -1,116 +1,122 @@
 <?php
 
-/*!	 @brief Linkage Schema item description
-						
-		\n
-		
-		@author Frederick Giasson, Structured Dynamics LLC.
-	
-		\n\n\n
-*/
-class LinkageSchema
-{
-	/*! @brief Version of the linkage schema */				
-	public $version;
-	
-	/*! @brief Mime type of the linkage schema (what type it links to) */				
-	public $linkedType;
-	
-	/*! @brief List of prefixes used within the schema */				
-	public $prefixList;
-	
-	/*! @brief List of atributes linked by the schema */				
-	public $attributeList = array();
-	
-	/*! @brief List of types linked by the schema */				
-	public $typeList = array();
-	
-	/*!	 @brief Set the value of the version
+
+	/*!	 @brief Linkage Schema item description
 							
 			\n
-			
-			@param[in] $version Version of the linkage schema
 			
 			@author Frederick Giasson, Structured Dynamics LLC.
 		
 			\n\n\n
-	*/	
+	*/
+
+class LinkageSchema
+{
+    /*! @brief Version of the linkage schema */                             
+    public $version;
+    
+    /*! @brief Mime type of the linkage schema (what type it links to) */                           
+    public $linkedType;
+    
+    /*! @brief List of prefixes used within the schema */                           
+    public $prefixes;
+    
+    /*! @brief List of atributes linked by the schema */                            
+    public $propertyX = array();
+    
+    /*! @brief List of types linked by the schema */                                
+    public $typeX = array();
+	
+	function __construct(){}
+	
+	function __destruct(){}
+	
+    /*!      @brief Set the value of the version
+                                                    
+                    \n
+                    
+                    @param[in] $version Version of the linkage schema
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */  	
 	public function setVersion($version)
 	{
 		$this->version = $version;
 	}
 
-	/*!	 @brief Set the value of the linked type
-							
-			\n
-			
-			@param[in] $linkedType Mime type of the language this schema links to (example: application/rdf+xml)
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/	
+    /*!      @brief Set the value of the linked type
+                                                    
+                    \n
+                    
+                    @param[in] $linkedType Mime type of the language this schema links to (example: application/rdf+xml)
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */ 
 	public function setLinkedType($linkedType)
 	{
 		$this->linkedType = $linkedType;
 	}
 	
-	/*!	 @brief Set a prefix used in this schema
-							
-			\n
-			
-			@param[in] $prefix Prefix to be used (example: "foaf:") 
-			@param[in] $uri Full URI we have to use to extend the prefix (ex: "http://xmlns.com/foaf/0.1/")
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/		
+    /*!      @brief Set a prefix used in this schema
+                                                    
+                    \n
+                    
+                    @param[in] $prefix Prefix to be used (example: "foaf:") 
+                    @param[in] $uri Full URI we have to use to extend the prefix (ex: "http://xmlns.com/foaf/0.1/")
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */ 	
 	public function setPrefix($prefix, $uri)
 	{
-		if(!is_array($this->prefixList))
+		if(!is_array($this->prefixes))
 		{		
-			$this->prefixList = array($prefix => $uri);
+			$this->prefixes = array($prefix => $uri);
 		}
 		else
 		{
-			$this->prefixList[$prefix] = $uri;
+			$this->prefixes[$prefix] = $uri;
 		}
 	}
 
-	/*!	 @brief Map an attribute to an attribute of an external format/vocabulary/ontology
-							
-			\n
-			
-			@param[in] $property Attribute we want to map to..
-			@param[in] $mapTo External attribute we want to map to
-			@param[in|out] $error Possible mapping errors
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/	
+    /*!      @brief Map an attribute to an attribute of an external format/-vocabulary/ontology
+                                                    
+                    \n
+                    
+                    @param[in] $property Attribute we want to map to.
+                    @param[in] $mapTo External attribute we want to map to
+                    @param[in|out] $error Possible mapping errors
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */     
 	public function setPropertyX($property, $mapTo, &$error)
 	{
-		$this->addProperty($this->attributeList[$property], $mapTo, $error);			
+		$this->addProperty($this->propertyX[$property], $mapTo, $error);			
 	}
 
-	/*!	 @brief Map type to a type of an external format/vocabulary/ontology
-							
-			\n
-			
-			@param[in] $type Type we want to map to..
-			@param[in] $mapTo External type we want to map to
-			@param[in] $add Additional information that has to be part of the transformation process
-			@param[in|out] $error Possible mapping errors
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/	
+    /*!      @brief Map type to a type of an external format/vocabulary/ontology
+                                                    
+                    \n
+                    
+                    @param[in] $type Type we want to map to..
+                    @param[in] $mapTo External type we want to map to
+                    @param[in] $add Additional information that has to be part of the transformation process
+                    @param[in|out] $error Possible mapping errors
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */   
 	public function setTypeX($type, $mapTo, $add, &$error)
 	{
-		$this->addType($this->typeList[$type], $mapTo, $add, $error);			
+		$this->addType($this->typeX[$type], $mapTo, $add, $error);			
 	}
 
 	private function addProperty(&$property, $mapTo, &$error)
@@ -122,14 +128,14 @@ class LinkageSchema
 		{
 			$prefix = substr($mapTo, 0, $pos);
 			
-			if(!isset($this->prefixList[$prefix]))
+			if(!isset($this->prefixes[$prefix]))
 			{
 				$error = "The prefix used '$prefix:' is undefined in the linkage file.";
 				return(FALSE);
 			}
 			else
 			{
-				$maptToUri = $this->prefixList[$prefix].substr($mapTo, $pos + 1, strlen($mapTo) - ($pos + 1));
+				$maptToUri = $this->prefixes[$prefix].substr($mapTo, $pos + 1, strlen($mapTo) - ($pos + 1));
 			}
 		}
 
@@ -168,14 +174,14 @@ class LinkageSchema
 		if(substr($mapTo, 0, 7) != "http://" && ($pos = strpos($mapTo, ":")) !== FALSE)
 		{
 			$prefix = substr($mapTo, 0, $pos);
-			if(!isset($this->prefixList[$prefix]))
+			if(!isset($this->prefixes[$prefix]))
 			{
 				$error = "The prefix used '$prefix:' is undefined in the linkage file.";
 				return(FALSE);
 			}
 			else
 			{
-				$mapToUri = $this->prefixList[$prefix].substr($mapTo, $pos + 1, strlen($mapTo) - ($pos + 1));
+				$mapToUri = $this->prefixes[$prefix].substr($mapTo, $pos + 1, strlen($mapTo) - ($pos + 1));
 			}
 		}
 		
@@ -190,14 +196,14 @@ class LinkageSchema
 			{
 				$prefix = substr($key, 0, $pos);
 				
-				if(!isset($this->prefixList[$prefix]))
+				if(!isset($this->prefixes[$prefix]))
 				{
 					$error = "The prefix used '$prefix:' is undefined in the linkage file.";
 					return(FALSE);
 				}
 				else
 				{
-					$k = $this->prefixList[$prefix].substr($key, $pos + 1, strlen($key) - ($pos + 1));
+					$k = $this->prefixes[$prefix].substr($key, $pos + 1, strlen($key) - ($pos + 1));
 				}
 			}
 
@@ -205,14 +211,14 @@ class LinkageSchema
 			{
 				$prefix = substr($value, 0, $pos);
 				
-				if(!isset($this->prefixList[$prefix]))
+				if(!isset($this->prefixes[$prefix]))
 				{
 					$error = "The prefix used '$prefix:' is undefined in the linkage file.";
 					return(FALSE);
 				}
 				else
 				{
-					$v = $this->prefixList[$prefix].substr($value, $pos + 1, strlen($value) - ($pos + 1));
+					$v = $this->prefixes[$prefix].substr($value, $pos + 1, strlen($value) - ($pos + 1));
 				}
 			}
 			
@@ -244,14 +250,14 @@ class LinkageSchema
 		}
 	}
 	
-	/*!	 @brief Generates a JSON serialized file of this linkage schema.
-							
-			\n
-			
-			@author Frederick Giasson, Structured Dynamics LLC.
-		
-			\n\n\n
-	*/		
+    /*!      @brief Generates a JSON serialized file of this linkage schema.
+                                                    
+                    \n
+                    
+                    @author Frederick Giasson, Structured Dynamics LLC.
+            
+                    \n\n\n
+    */   	
 	public function generateJsonSerialization()
 	{
 		$schema = "{\n";
@@ -267,11 +273,11 @@ class LinkageSchema
 			$schema .= "        \"linkedType\": \"".$this->linkedType."\",\n";
 		}
 		
-		if(count($this->prefixList) > 0)
+		if(count($this->prefixes) > 0)
 		{
 			$schema .= "        \"prefixList\": {\n";
 
-			foreach($this->prefixList as $prefix => $uri)
+			foreach($this->prefixes as $prefix => $uri)
 			{
 				$schema .= "            \"".$prefix."\": \"".$uri."\",\n";
 			}
@@ -281,11 +287,11 @@ class LinkageSchema
 			$schema .= "        },\n";
 		}
 		
-		if(count($this->attributeList) > 0)
+		if(count($this->propertyX) > 0)
 		{
 			$schema .= "        \"attributeList\": {\n";
 
-			foreach($this->attributeList as $property => $maps)
+			foreach($this->propertyX as $property => $maps)
 			{
 				$schema .= "            \"".$property."\": {\n";
 				
@@ -300,16 +306,16 @@ class LinkageSchema
 			$schema .= "        },\n";
 		}
 		
-		if(count($this->typeList) < 1)
+		if(count($this->typeX) < 1)
 		{
 			$schema = substr($schema, 0, strlen($schema) - 2)."\n";			
 		}
 		
-		if(count($this->typeList) > 0)
+		if(count($this->typeX) > 0)
 		{
 			$schema .= "        \"typeList\": {\n";
 
-			foreach($this->typeList as $type => $maps)
+			foreach($this->typeX as $type => $maps)
 			{
 				$schema .= "            \"".$type."\": {\n";
 				
@@ -326,7 +332,6 @@ class LinkageSchema
 		
 		$schema .= "    }\n";
 		
-
 		$schema .= "}\n";
 		
 		return($schema);
