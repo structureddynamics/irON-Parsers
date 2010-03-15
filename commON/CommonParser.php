@@ -980,7 +980,6 @@
           }
         } 
       }
-      echo "test";
     }    
 
     /*!   @brief Check if an attribute is a reification attribute.
