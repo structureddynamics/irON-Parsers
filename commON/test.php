@@ -1,24 +1,24 @@
 <?php
+include_once("CommonParser.php");
 
-	include_once("CommonParser.php");
-
-	$csvFile = "&&recordList
+$csvFile =
+  "&&recordList
 &id,&type,&prefLabel,&homepage,&authorClaimsPage,&isAuthorOfTitle,&isAuthorOfTitle&prefURL
-info:lib:am:2009-02-18:maria_francisca_abad_garcia,Person,Maria Francisca Abad-Garcia,,http://authorclaim.org/profile/pab1/,Acceso Abierto y revistas médicas españolas,http://eprints.rclis.org/11490/1/open_acces_Medicina_Cl%C3%ADnica_2006_versi%C3%B3n_aceptada_del_autor.pdf
-,,,,,Una base de datos de recursos web médicos: una solución a medida para una recuperación más eficaz de información de Internet,http://eprints.rclis.org/527/2/15_UV_BD_Good.pdf
+info:lib:am:2009-02-18:maria_francisca_abad_garcia,Person,Maria Francisca Abad-Garcia,,http://authorclaim.org/profile/pab1/,Acceso Abierto y revistas m?dicas espa?olas,http://eprints.rclis.org/11490/1/open_acces_Medicina_Cl%C3%ADnica_2006_versi%C3%B3n_aceptada_del_autor.pdf
+,,,,,Una base de datos de recursos web m?dicos: una soluci?n a medida para una recuperaci?n m?s eficaz de informaci?n de Internet,http://eprints.rclis.org/527/2/15_UV_BD_Good.pdf
 ,,,,,[Open access and the Spanish medical journals],http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=17040632
-,,,,,Produccion científica de la Comunitat Valenciana en materias de biomedicina y ciencias de la salud a través de las bases de datos del Institute of Scientific Information (ISI) 2000-2004.,http://eprints.rclis.org/15459/1/produccion_cientifica_def_200307%5B1%5D.pdf
-,,,,,La base de datos de recursos web de la biblioteca médica virtual del COMV,http://eprints.rclis.org/8788/1/La_base_de_datos_de_recursos_web_de_la_biblioteca_m%C3%A9dica_virtual_del_COMV.pdf
-,,,,,Uso de internet por los médicos colegiados de Valencia: un estudio de viabilidad de la Biblioteca Médica Virtual del Colegio Oficial de Médicos de Valencia,http://eprints.rclis.org/12145/1/epi_vol_13_n_2.pdf
-,,,,,Ampliando el horizonte de MEDLINE : 100 bases de datos bibliográficas médicas gratuitas en la red,http://eprints.rclis.org/5179/1/Herramientas_internet_Malaga_2003.pdf
-,,,,,\"Information needs and uses: an analysis of the literature published in Spain, 1990–2004\",http://eprints.rclis.org/12136/1/Information_needs_and_uses.pdf
+,,,,,Produccion cient?fica de la Comunitat Valenciana en materias de biomedicina y ciencias de la salud a trav?s de las bases de datos del Institute of Scientific Information (ISI) 2000-2004.,http://eprints.rclis.org/15459/1/produccion_cientifica_def_200307%5B1%5D.pdf
+,,,,,La base de datos de recursos web de la biblioteca m?dica virtual del COMV,http://eprints.rclis.org/8788/1/La_base_de_datos_de_recursos_web_de_la_biblioteca_m%C3%A9dica_virtual_del_COMV.pdf
+,,,,,Uso de internet por los m?dicos colegiados de Valencia: un estudio de viabilidad de la Biblioteca M?dica Virtual del Colegio Oficial de M?dicos de Valencia,http://eprints.rclis.org/12145/1/epi_vol_13_n_2.pdf
+,,,,,Ampliando el horizonte de MEDLINE : 100 bases de datos bibliogr?ficas m?dicas gratuitas en la red,http://eprints.rclis.org/5179/1/Herramientas_internet_Malaga_2003.pdf
+,,,,,\"Information needs and uses: an analysis of the literature published in Spain, 1990?2004\",http://eprints.rclis.org/12136/1/Information_needs_and_uses.pdf
 info:lib:am:1971-02-01:jose_manuel_barrueco,Person,Jose Manuel Barrueco,http://www.uv.e/=barrueco,http://authorclaim.org/profile/pba1/,Personal Data in a Large Digital Library,http://citeseer.ist.psu.edu/473002.html
 ,,,,,Cataloging Economics preprints: an introduction to the RePEc project,http://citeseer.ist.psu.edu/251821.html
 ,,,,,Personal Data in a Large Digital Library,http://citeseer.ist.psu.edu/466126.html
 ,,,,,WoPEc usage in 1999AD,http://citeseer.ist.psu.edu/623255.html
 ,,,,,Distributed Cataloging on the Internet: the RePEc project,http://citeseer.ist.psu.edu/360116.html
 ,,,,,Automated Extraction of Citation Data in a Distributed Digital Library.,http://dblp.uni-trier.de/db/conf/nddl/nddl2002.html#CruzK02
-,,,,,ReLIS: una biblioteca digital distribuida para Documentación.,http://dblp.uni-trier.de/db/conf/jbidi/jbidi2002.html#CollC02
+,,,,,ReLIS: una biblioteca digital distribuida para Documentaci?n.,http://dblp.uni-trier.de/db/conf/jbidi/jbidi2002.html#CollC02
 ,,,,,Personal Data in a Large Digital Library.,http://dblp.uni-trier.de/db/conf/ercimdl/ecdl2000.html#CruzKK00
 info:lib:am:2009-07-14:geoffrey_bilder,Person,Geoffrey Bilder,,http://authorclaim.org/profile/pbi1/,,
 info:lib:am:2009-04-29:travis_c_brooks,Person,Travis C. Brooks,,http://authorclaim.org/profile/pbr1/,Subject Access through Community Partnerships: A Case Study,http://arxiv.org/abs/physics/0309027
@@ -28,7 +28,7 @@ info:lib:am:2009-04-29:travis_c_brooks,Person,Travis C. Brooks,,http://authorcla
 ,,,,,Information Resources in High-Energy Physics: Surveying the Present Landscape and Charting the Future Course,http://dblp.uni-trier.de/db/journals/corr/corr0804.html#abs-0804-2701
 ,,,,,Information Resources in High-Energy Physics: Surveying the Present Landscape and Charting the Future Course,http://arxiv.org/abs/0804.2701
 ,,,,,Preliminary Results from a Search for Disoriented Chiral Condensates at MiniMax,http://arxiv.org/abs/hep-ex/9608012
-info:lib:am:1971-02-23:bjoern_brembs,Person,Björn Brembs,http://brembs.net,http://authorclaim.org/profile/pbr2/,Operant learning of Drosophila at the torque meter.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=19066552
+info:lib:am:1971-02-23:bjoern_brembs,Person,Bj?rn Brembs,http://brembs.net,http://authorclaim.org/profile/pbr2/,Operant learning of Drosophila at the torque meter.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=19066552
 ,,,,,Flight initiation and maintenance deficits in flies with genetically altered biogenic amine levels.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=17928454
 ,,,,,Different parameters support generalization and discrimination learning in Drosophila at the flight simulator.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=17015859
 ,,,,,Double dissociation of PKC and AC manipulations on operant and classical learning in Drosophila.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=18674907
@@ -81,53 +81,53 @@ info:lib:am:2009-10-02:antonella_de_robbio,Person,Antonella De Robbio,http://www
 ,,,,,Mathematics subject classification and related schemes in the OAI framework,http://eprints.rclis.org/1612/
 ,,,,,\"Bibliotecari con Moodle, su Moodle, per Moodle\",http://eprints.rclis.org/13397/
 ,,,,,Vincenti e perdenti nelle sfide del Database Networking: dalle antiche torri ai sistemi clienti/serventi,http://eprints.rclis.org/573/
-,,,,,\"Flash su alcune sessioni del WLIC 2005 World Library and Information Congress dell’IFLA, Oslo 14-18 agosto 2005\",http://eprints.rclis.org/5685/
+,,,,,\"Flash su alcune sessioni del WLIC 2005 World Library and Information Congress dell?IFLA, Oslo 14-18 agosto 2005\",http://eprints.rclis.org/5685/
 ,,,,,Nuovi scenari nel diritto d'autore italiano: dove sono finite le libere utilizzazioni? [Italian],http://eprints.rclis.org/114/
 ,,,,,Analisi citazionale e indicatori bibliometrici nel modello Open Access,http://eprints.rclis.org/11999/
-,,,,,\"Copyright scientifico per l’università e la ricerca. Intervento alla Tavola rotonda “Spazi e prospettive della Cultura in Digitale” al Convegno \"\"Diritto e Tecnologie Digitali per la Valorizzazione e l'accessibilità delle Conoscenze\"\", Milano, 20 ottobre 2007\",http://eprints.rclis.org/12185/
+,,,,,\"Copyright scientifico per l?universit? e la ricerca. Intervento alla Tavola rotonda ?Spazi e prospettive della Cultura in Digitale? al Convegno \"\"Diritto e Tecnologie Digitali per la Valorizzazione e l'accessibilit? delle Conoscenze\"\", Milano, 20 ottobre 2007\",http://eprints.rclis.org/12185/
 ,,,,,Progetti di digitalizzazione: vademecum on-the-fly,http://eprints.rclis.org/137/
 ,,,,,Evoluzione e rivoluzione dei periodici elettronici,http://eprints.rclis.org/76/
 ,,,,,Metadati per la comunicazione scientifica [Italian],http://eprints.rclis.org/122/
-,,,,,\"William Y. Arms \"\"Digital libraries\"\". Cambridge, MA, London: MIT Press, 2000. xi, 287 pp. ISBN 0-262-01180-8 Price £27.95\",http://eprints.rclis.org/4869/
+,,,,,\"William Y. Arms \"\"Digital libraries\"\". Cambridge, MA, London: MIT Press, 2000. xi, 287 pp. ISBN 0-262-01180-8 Price ?27.95\",http://eprints.rclis.org/4869/
 ,,,,,Archivi aperti. [Dibattito televisivo],http://eprints.rclis.org/4443/
 ,,,,,Stato dell'arte del diritto d'autore in Italia : emergenza biblioteche,http://eprints.rclis.org/90/
 ,,,,,Open access e copyright: il copyright scientifico nelle produzioni intellettuali di ricerca,http://eprints.rclis.org/8268/
 ,,,,,Relazione tecnica su DSpace (MIT),http://eprints.rclis.org/32/
 ,,,,,Rights management policies in the Open Access environment,http://eprints.rclis.org/12303/
 ,,,,,Periodici elettronici nel ciberspazio,http://eprints.rclis.org/80/
-,,,,,Frammenti Gottfrield Wilhem Leibniz fra proprietà intellettuale e biblioteca universale,http://eprints.rclis.org/5686/
+,,,,,Frammenti Gottfrield Wilhem Leibniz fra propriet? intellettuale e biblioteca universale,http://eprints.rclis.org/5686/
 ,,,,,Medline free on the Web : the PubMed and Internet Grateful Med services of the National Library of Medicine,http://eprints.rclis.org/1121/
-,,,,,Berlin5 Accesso aperto. Dalla pratica all’impatto: Le conseguenze della disseminazione della conoscenza. Report della conferenza,http://eprints.rclis.org/12044/
-,,,,,E-prints for Library and Information Science (E-LIS) : la tecnología al servicio de la bibliotecología y las ciencias de la información,http://eprints.rclis.org/2849/
-,,,,,\"\"\"OPAC italiani\"\" di AIB-WEB si interroga: la risposta è MAI\",http://eprints.rclis.org/572/
-,,,,,Right to access to contents versus intellectual property rights in the Global Information Infrastructure [First version presented at the International Conference] Diritto di accesso ai contenuti e diritti di proprietà intellettuale nell'infrastruttura globale dell'informazione [versione italiana presentata al convegno internazionale],http://eprints.rclis.org/47/
+,,,,,Berlin5 Accesso aperto. Dalla pratica all?impatto: Le conseguenze della disseminazione della conoscenza. Report della conferenza,http://eprints.rclis.org/12044/
+,,,,,E-prints for Library and Information Science (E-LIS) : la tecnolog?a al servicio de la bibliotecolog?a y las ciencias de la informaci?n,http://eprints.rclis.org/2849/
+,,,,,\"\"\"OPAC italiani\"\" di AIB-WEB si interroga: la risposta ? MAI\",http://eprints.rclis.org/572/
+,,,,,Right to access to contents versus intellectual property rights in the Global Information Infrastructure [First version presented at the International Conference] Diritto di accesso ai contenuti e diritti di propriet? intellettuale nell'infrastruttura globale dell'informazione [versione italiana presentata al convegno internazionale],http://eprints.rclis.org/47/
 ,,,,,E-LIS : un archivio aperto internazionale per la Biblioteconomia e Scienza dell'Informazione,http://eprints.rclis.org/2308/
 ,,,,,Management eines internationalen Open Access-Archivs: das Beispiel E-LIS,http://eprints.rclis.org/16636/
-,,,,,\"MKM Mathematical Knowledge Management : Second International Conference on MKM Mathematical Knowledge Management 2003. Bertinoro (Forlì), 16-20 febbraio 2003\",http://eprints.rclis.org/119/
+,,,,,\"MKM Mathematical Knowledge Management : Second International Conference on MKM Mathematical Knowledge Management 2003. Bertinoro (Forl?), 16-20 febbraio 2003\",http://eprints.rclis.org/119/
 ,,,,,Chi ha creato il primo circuito per la distribuzione e lo scambio di preprint?,http://eprints.rclis.org/6844/
 ,,,,,Medline: ERL versus Pub/Med. Valutazione comparativa tra l'accesso a Medline Pub/Med della National Library of Medicine e l'accesso a Medline su ERL [Italian],http://eprints.rclis.org/83/
-,,,,,\"Terzo Modulo dello Studio Biblioteconomico per lo Studio di fattibilità della BEIC Biblioteca Europea di Informazione e Cultura: Digitalizzazione e Copyright\"\". Aprile 2002 (pagg. 191)\",http://eprints.rclis.org/85/
+,,,,,\"Terzo Modulo dello Studio Biblioteconomico per lo Studio di fattibilit? della BEIC Biblioteca Europea di Informazione e Cultura: Digitalizzazione e Copyright\"\". Aprile 2002 (pagg. 191)\",http://eprints.rclis.org/85/
 ,,,,,Forme di tutela giuridica per le banche dati fra diritto d'autore e diritto sui generis: il Decreto Legislativo n. 169/99 del 15 giugno 1999 e la Legge n. 248 del 18 agosto 2000 [Italian],http://eprints.rclis.org/759/
 ,,,,,Open access in Italia,http://eprints.rclis.org/6815/
 ,,,,,MyLibrary,http://eprints.rclis.org/61/
-,,,,,\"Osservazioni sul decreto legislativo di attuazione della direttiva 2001/29/CE, sull'armonizzazione di taluni aspetti del diritto d'autore e dei diritti connessi nella società dell'informazione\",http://eprints.rclis.org/115/
+,,,,,\"Osservazioni sul decreto legislativo di attuazione della direttiva 2001/29/CE, sull'armonizzazione di taluni aspetti del diritto d'autore e dei diritti connessi nella societ? dell'informazione\",http://eprints.rclis.org/115/
 ,,,,,Analysis of the Italian Biomedical and Veterinary Serial Publications: Remarks About the International Visibility,http://eprints.rclis.org/92/
 ,,,,,Scientific and General Subject Classifications in the Digital World,http://eprints.rclis.org/26/
-,,,,,Open Access e copyright negli archivi istituzionali: il ruolo delle università nella gestione dei diritti,http://eprints.rclis.org/15772/
+,,,,,Open Access e copyright negli archivi istituzionali: il ruolo delle universit? nella gestione dei diritti,http://eprints.rclis.org/15772/
 ,,,,,Diritto d'autore e norma italiana: torre di Babele o soglia al terzo millennio?,http://eprints.rclis.org/12436/
-,,,,,Berlin5 Open Access: Desde la práctica al impacto. Consecuencias de la diseminación del conocimiento,http://eprints.rclis.org/13241/
+,,,,,Berlin5 Open Access: Desde la pr?ctica al impacto. Consecuencias de la diseminaci?n del conocimiento,http://eprints.rclis.org/13241/
 ,,,,,OPAC ricombinanti tra nuovi assetti di mercato e cambiamenti tecnologici,http://eprints.rclis.org/413/
 ,,,,,A proposito di digital library [discussioni],http://eprints.rclis.org/12439/
 ,,,,,On the road of e-journals : paesaggi in movimento nell'evoluzione dei periodici elettronici,http://eprints.rclis.org/75/
-,,,,,Voltapagina : un progetto tra l’Università degli Studi di Padova e le scuole del territorio,http://eprints.rclis.org/3131/
+,,,,,Voltapagina : un progetto tra l?Universit? degli Studi di Padova e le scuole del territorio,http://eprints.rclis.org/3131/
 ,,,,,I periodici elettronici in Internet. Stato dell'arte e prospettive di sviluppo,http://eprints.rclis.org/12434/
 ,,,,,Relazione tecnica su CDSware. Technical report on CDSware,http://eprints.rclis.org/31/
-,,,,,\"Proprietà intellettuale nel circuito della comunicazione scientifica \"\"open\"\"\",http://eprints.rclis.org/7/
+,,,,,\"Propriet? intellettuale nel circuito della comunicazione scientifica \"\"open\"\"\",http://eprints.rclis.org/7/
 ,,,,,Nuova versione 2001 del MAI Metaopac Azalai italiano,http://eprints.rclis.org/2155/
 ,,,,,Medline: comparazione tecnica tra le due versioni ERL (Express e Advanced),http://eprints.rclis.org/84/
 ,,,,,The International Effort Towards the Creation of an International Repository for Library and Information Science: Breaking Barriers in the Access to Scientific Research,http://eprints.rclis.org/16360/
 ,,,,,\"URI, URN e URL, una questione di definizioni : universal versus uniform\",http://eprints.rclis.org/212/
-,,,,,\"Quanto \"\"aperto\"\" è il vostro OPAC? [Italian presentation]\",http://eprints.rclis.org/361/
+,,,,,\"Quanto \"\"aperto\"\" ? il vostro OPAC? [Italian presentation]\",http://eprints.rclis.org/361/
 ,,,,,Risorse online per la matematica nel virtual reference desk scientifico,http://eprints.rclis.org/79/
 ,,,,,Copyright elettonico: stato dell'arte,http://eprints.rclis.org/113/
 ,,,,,MetaOPAC Azalai italiano: l'evoluzione negli ultimi anni,http://eprints.rclis.org/12186/
@@ -138,11 +138,11 @@ info:lib:am:2009-10-02:antonella_de_robbio,Person,Antonella De Robbio,http://www
 ,,,,,The interaction between democracy and Internet through libraries in Italy: is the Italian government going to establish controls on Internet Content?,http://eprints.rclis.org/16632/
 ,,,,,\"Open Access all'UNESCO per un accesso universale alla conoscenza : risultati alla 33.ma Conferenza Generale UNESCO Commissione V Comunicazione e Informazione, 11-13 ottobre 2005\",http://eprints.rclis.org/6706/
 ,,,,,Diritti vecchi e nuovi tra servizi bibliotecari e social web: come cambiano le regole di un gioco di ruolo,http://eprints.rclis.org/12833/
-,,,,,Open archives for Library and Information Science: an international experience = Ogólnodostepne archiwa a informacja naukowa i biblioteczna – doswiadczenia globalne,http://eprints.rclis.org/12377/
+,,,,,Open archives for Library and Information Science: an international experience = Og?lnodostepne archiwa a informacja naukowa i biblioteczna ? doswiadczenia globalne,http://eprints.rclis.org/12377/
 ,,,,,Archivi istituzionali e diritto d'autore,http://eprints.rclis.org/16529/
-,,,,,Fruizione e produzione di contenuti multimediali e proprietà intellettuale nel cyberspazio,http://eprints.rclis.org/27/
-,,,,,Con DoIS l'informazione professionale è in linea,http://eprints.rclis.org/1732/
-,,,,,Mathematics Subject Classification e schemi correlati nell'àmbito di OAI,http://eprints.rclis.org/1643/
+,,,,,Fruizione e produzione di contenuti multimediali e propriet? intellettuale nel cyberspazio,http://eprints.rclis.org/27/
+,,,,,Con DoIS l'informazione professionale ? in linea,http://eprints.rclis.org/1732/
+,,,,,Mathematics Subject Classification e schemi correlati nell'?mbito di OAI,http://eprints.rclis.org/1643/
 ,,,,,Metadati nel servizio DoIS per un accesso ibrido all'informazione professionale,http://eprints.rclis.org/33/
 ,,,,,MathSci,http://eprints.rclis.org/82/
 ,,,,,MKM Mathematical Knowledge Management,http://eprints.rclis.org/11205/
@@ -150,14 +150,14 @@ info:lib:am:2009-10-02:antonella_de_robbio,Person,Antonella De Robbio,http://www
 ,,,,,\"Open Archive per una comunicazione scientifica \"\"free online\"\"\",http://eprints.rclis.org/48/
 ,,,,,E-LIS : E-prints in Library and Information Science,http://eprints.rclis.org/4497/
 ,,,,,Un progetto per la classificazione matematica: Multivision MSC2000,http://eprints.rclis.org/1403/
-,,,,,Strategie e strumenti dell’Open Access per la valutazione della ricerca,http://eprints.rclis.org/16634/
+,,,,,Strategie e strumenti dell?Open Access per la valutazione della ricerca,http://eprints.rclis.org/16634/
 ,,,,,E-LIS : un open archive in Library and Information Science,http://eprints.rclis.org/201/
 ,,,,,Open Access al centro dei nuovi scenari di e-governance,http://eprints.rclis.org/6806/
 ,,,,,Workshop on the open archives initiative (OAI) and peer review journals in Europe,http://eprints.rclis.org/2156/
 ,,,,,Online resources for mathematics in the scientific virtual reference desk,http://eprints.rclis.org/343/
-,,,,,\"Virtual Reference Desk: Project of cooperation: debate, technical, agreeements and setting up of the working group. Meeting \"\"A new Library for European People\"\" among Public Libraries in Alpe-Adria Regions for a Cultural Network Organized by Biblioteca Civica Bertoliana – Vicenza Patronage of Italian Library Association. ALPE-ADRIA WORKING COMMUNITY REGIONE VENETO (Presidency 2001-2002) Working Group on Cultural Relationship Culture and Society Commission\",http://eprints.rclis.org/159/
+,,,,,\"Virtual Reference Desk: Project of cooperation: debate, technical, agreeements and setting up of the working group. Meeting \"\"A new Library for European People\"\" among Public Libraries in Alpe-Adria Regions for a Cultural Network Organized by Biblioteca Civica Bertoliana ? Vicenza Patronage of Italian Library Association. ALPE-ADRIA WORKING COMMUNITY REGIONE VENETO (Presidency 2001-2002) Working Group on Cultural Relationship Culture and Society Commission\",http://eprints.rclis.org/159/
 ,,,,,Non solo copyright: le vie dell'Open Access,http://eprints.rclis.org/12898/
-,,,,,Right to access to contents versus intellectual property rights in the Global Information Infrastructure [English version published in the Conference Proceedings] Diritto di accesso ai contenuti e diritti di proprietà intellettuale nell'infrastruttura globale dell'informazione [Versione italiana pubblicata sugli Atti della Conferenza],http://eprints.rclis.org/162/
+,,,,,Right to access to contents versus intellectual property rights in the Global Information Infrastructure [English version published in the Conference Proceedings] Diritto di accesso ai contenuti e diritti di propriet? intellettuale nell'infrastruttura globale dell'informazione [Versione italiana pubblicata sugli Atti della Conferenza],http://eprints.rclis.org/162/
 ,,,,,Mathematics Subject Classification and Related Schemes in the OAI Framework.,http://dblp.uni-trier.de/db/conf/icm/icm2002ei.html#RobbioMM02
 ,,,,,Gaining independence with e-prints archives and OAI: secondo workshop OAI in Europa,http://eprints.rclis.org/21/
 ,,,,,Open Access e gestione dei diritti,http://eprints.rclis.org/15969/
@@ -165,19 +165,19 @@ info:lib:am:2009-10-02:antonella_de_robbio,Person,Antonella De Robbio,http://www
 ,,,,,E-LIS: the Open Archive for Library and information Science,http://eprints.rclis.org/11032/
 ,,,,,Tendenze evolutive degli opac italiani visti attraverso il MAI,http://eprints.rclis.org/7548/
 ,,,,,Tutela giuridica e diritto d'autore nell'editoria elettronica,http://eprints.rclis.org/1/
-,,,,,\"Il regolamento di attuazione della legge 15 aprile 2004, n. 106 sul deposito legale dei documenti di interesse culturale destinati all’uso pubblico, per l’università e la ricerca\",http://eprints.rclis.org/6656/
+,,,,,\"Il regolamento di attuazione della legge 15 aprile 2004, n. 106 sul deposito legale dei documenti di interesse culturale destinati all?uso pubblico, per l?universit? e la ricerca\",http://eprints.rclis.org/6656/
 ,,,,,Il contesto accademico-scientifico e i profili di utenza : l'utente/autore,http://eprints.rclis.org/17/
 ,,,,,MAI : MetaOPAC Azalai Italiano,http://eprints.rclis.org/1169/
 ,,,,,Le nuove tecnologie per l'accesso all'informazione: gli strumenti per la costruzione di biblioteche digitali,http://eprints.rclis.org/393/
 ,,,,,La comunicazione scientifica: il processo di pubblicazione e il mercato,http://eprints.rclis.org/12895/
 ,,,,,Il copyright scientifico per una gestione aperta della conoscenza,http://eprints.rclis.org/10609/
 ,,,,,Guide alle biblioteche online,http://eprints.rclis.org/64/
-,,,,,\"L'identità di OPAC1: lo strumento, l'attività del gruppo, gli OPAC, prospettive future\",http://eprints.rclis.org/415/
+,,,,,\"L'identit? di OPAC1: lo strumento, l'attivit? del gruppo, gli OPAC, prospettive future\",http://eprints.rclis.org/415/
 ,,,,,La tutela giuridica delle banche nel diritto d'autore e nei diritti connessi.,http://eprints.rclis.org/30/
 ,,,,,Il copyright negli archivi istituzionali di ateneo,http://eprints.rclis.org/2671/
 ,,,,,L'enciclopedia aperta Wikipedia e matematica,http://eprints.rclis.org/6831/
 ,,,,,Gli opac italiani,http://eprints.rclis.org/570/
-,,,,,\"Impacts de la Directive européenne sur le droit d'auteur et la société de l'information sur la loi italienne, et sur les exceptions au droit\",http://eprints.rclis.org/6807/
+,,,,,\"Impacts de la Directive europ?enne sur le droit d'auteur et la soci?t? de l'information sur la loi italienne, et sur les exceptions au droit\",http://eprints.rclis.org/6807/
 ,,,,,History and mission of E-LIS,http://eprints.rclis.org/5379/
 ,,,,,I metadati per la gestione dei diritti,http://eprints.rclis.org/10450/
 ,,,,,Gli archivi e-prints in Italia,http://eprints.rclis.org/1168/
@@ -187,15 +187,15 @@ info:lib:am:2009-10-02:antonella_de_robbio,Person,Antonella De Robbio,http://www
 ,,,,,Lancio Web di Voyager nel cyberspazio: il nuovo catalogo online della Library of Congress,http://eprints.rclis.org/12438/
 ,,,,,Le tesi nel diritto d'autore : un argomento complesso,http://eprints.rclis.org/91/
 ,,,,,L'evoluzione della specie: dagli OPAC al MetaOpac Presentazione,http://eprints.rclis.org/1033/
-,,,,,\"Intervista con Antonella De Robbio, Responsabile del Settore Progetti e Biblioteca Digitale del Centro d'Ateneo per le Biblioteche CAB dell' Università di Padova e Referente per il diritto d'autore del Sistema Bibliotecario di Ateneo\",http://eprints.rclis.org/875/
+,,,,,\"Intervista con Antonella De Robbio, Responsabile del Settore Progetti e Biblioteca Digitale del Centro d'Ateneo per le Biblioteche CAB dell' Universit? di Padova e Referente per il diritto d'autore del Sistema Bibliotecario di Ateneo\",http://eprints.rclis.org/875/
 ,,,,,Library and Information Science Open Access: a review of the last six years in an international multilingual environment,http://eprints.rclis.org/16362/
 ,,,,,Interconnessioni tra classificazioni scientifiche e classificazioni generali nel mondo digitale,http://eprints.rclis.org/24/
 ,,,,,MAI: MetaOPAC Azalai Italien = MAI: MetaOPAC Azalai Italiano,http://eprints.rclis.org/34/
 ,,,,,\"L'evoluzione della specie: dagli OPAC al MetaOpac Presentazione di MetaOPAC Azalai Italiano. Seminario AIB-WEB-2 L'evoluzione della specie: dagli OPAC al MetaOpac, 19 maggio 1999. Roma\",http://eprints.rclis.org/569/
-,,,,,Il copyright negli archivi istituzionali: il ruolo delle Università nella gestione dei diritti,http://eprints.rclis.org/15259/
+,,,,,Il copyright negli archivi istituzionali: il ruolo delle Universit? nella gestione dei diritti,http://eprints.rclis.org/15259/
 ,,,,,\"Indagine comparativa tra i database bibliografici MEDLINE, EMBASE e PASCAL Biomed\",http://eprints.rclis.org/571/
 ,,,,,\"La biblioteca nel Web, il Web nella biblioteca\",http://eprints.rclis.org/70/
-info:lib:am:2009-06-08:eugenio_c_ferreira,Person,Eugénio C. Ferreira,http://www.deb.uminho.pt/ecferreira/,http://authorclaim.org/profile/pfe1/,\"Image analysis, methanogenic activity measurements, and molecular biological techniques to monitor granular sludge from an EGSB reactor fed with oleic acid.\",http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=12701926
+info:lib:am:2009-06-08:eugenio_c_ferreira,Person,Eug?nio C. Ferreira,http://www.deb.uminho.pt/ecferreira/,http://authorclaim.org/profile/pfe1/,\"Image analysis, methanogenic activity measurements, and molecular biological techniques to monitor granular sludge from an EGSB reactor fed with oleic acid.\",http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=12701926
 ,,,,,Knowledge-based fuzzy system for diagnosis and control of an integrated biological wastewater treatment process.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=16722082
 ,,,,,Development of an image analysis procedure for identifying protozoa and metazoa typical of activated sludge system.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=17399764
 ,,,,,Activated sludge process monitoring through in situ near-infrared spectral analysis.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=18520023
@@ -228,7 +228,7 @@ info:lib:am:2009-06-08:eugenio_c_ferreira,Person,Eugénio C. Ferreira,http://www.
 ,,,,,Data Integration Issues in the Reconstruction of the Genome-Scale Metabolic Model of Zymomonas Mobillis.,http://dblp.uni-trier.de/db/conf/iwpacbb/iwpacbb2008.html#PintoDLCFRR08
 info:lib:am:1968-09-19:gabriel_gallezot,Person,gabriel gallezot,http://www.zotero.org/gabriel,http://authorclaim.org/profile/pga1/,,
 info:lib:am:2009-04-26:lambert_heller,Person,Lambert Heller,http://wikify.org/,http://authorclaim.org/profile/phe1/,Bibliothek 2.0 - Die Zukunft der Bibliothek?,http://eprints.rclis.org/12429/
-,,,,,\"Social Software – Bausteine einer \"\"Bibliothek 2.0\"\"\",http://eprints.rclis.org/10129/
+,,,,,\"Social Software ? Bausteine einer \"\"Bibliothek 2.0\"\"\",http://eprints.rclis.org/10129/
 ,,,,,\"Bibliothek 2.0 - Perspektiven, Probleme, Handlungsbereiche\",http://eprints.rclis.org/13808/
 ,,,,,Bibliothek 2.0 - Die Zukunft der Bibliothek?,http://eprints.rclis.org/7618/
 info:lib:am:2008-01-21:eberhard_r_hilf,Person,Eberhard R. Hilf,http://www.isn-oldenburg.de/~hilf,http://authorclaim.org/profile/phi1/,Flexible Interoperability in a Federated Digital Library of Theses and Dissertations,http://citeseer.ist.psu.edu/496736.html
@@ -275,7 +275,7 @@ whoami:per:1965-06-05:thomas_krichel,Person,Thomas Krichel,http://openlib.org/ho
 ,,,,,Fiscal and monetary policy in a monetary union: Credible inflation targets or monetized debt?,http://econpapers.repec.org/RePEc:spr:weltar:v:132:y:1996:i:1:p:28-54
 ,,,,,\"RePEc, an Open Library for Economics\",http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.28.9204
 ,,,,,Setting up large-scale archive networks,http://eprints.rclis.org/939/
-,,,,,Proc. Int’l. Conf. on Dublin Core and Metadata Applications 2001 A metadata framework to support scholarly communication *,http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.104.4830
+,,,,,Proc. Int?l. Conf. on Dublin Core and Metadata Applications 2001 A metadata framework to support scholarly communication *,http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.104.4830
 ,,,,,\"RePEc and Socionet as partners in a changing digital library environment, 1997 to 2004 and beyond\",http://eprints.rclis.org/1830/
 ,,,,,A metadata framework to support scholarly communication,http://eprints.rclis.org/431/
 ,,,,,A metadata framework to support scholarly communication.,http://dblp.uni-trier.de/db/conf/dc/dc2001.html#KrichelW01
@@ -441,39 +441,39 @@ info:lib:am:1972-02-05:heath_bland_o_connell,Person,Heath Bland O'Connell,http:/
 ,,,,,\"Rho-omega mixing, vector meson dominance and the pion form-factor\",http://arxiv.org/abs/hep-ph/9501251
 ,,,,,An Effective Approach to VMD at One Loop Order and the Departures from Ideal Mixing for Vector Mesons,http://arxiv.org/abs/nucl-th/0004005
 ,,,,,Vector Meson Mixing and Charge Symmetry Violation,http://arxiv.org/abs/hep-ph/9510425
-info:lib:am:2009-02-12:fernanda_peset,Person,fernanda peset,,http://authorclaim.org/profile/ppe1/,Políticas editoriales en la documentación española e implantación de E-LIS (E-Prints in Library and Information Science),http://eprints.rclis.org/416/1/CALSI.pdf
-,,,,,Nuevas técnicas de publicación científica. Tercera Jornada Medes-Lilly,http://eprints.rclis.org/13552/1/medes-3.pdf
-,,,,,Iniciativas españolas en OAI-PMH: presente y proyectos inmediatos,http://eprints.rclis.org/6679/1/2006-PESET.pdf
-,,,,,Análisis de los directorios privados de información empresarial española,http://eprints.rclis.org/15406/1/243-257.pdf
+info:lib:am:2009-02-12:fernanda_peset,Person,fernanda peset,,http://authorclaim.org/profile/ppe1/,Pol?ticas editoriales en la documentaci?n espa?ola e implantaci?n de E-LIS (E-Prints in Library and Information Science),http://eprints.rclis.org/416/1/CALSI.pdf
+,,,,,Nuevas t?cnicas de publicaci?n cient?fica. Tercera Jornada Medes-Lilly,http://eprints.rclis.org/13552/1/medes-3.pdf
+,,,,,Iniciativas espa?olas en OAI-PMH: presente y proyectos inmediatos,http://eprints.rclis.org/6679/1/2006-PESET.pdf
+,,,,,An?lisis de los directorios privados de informaci?n empresarial espa?ola,http://eprints.rclis.org/15406/1/243-257.pdf
 ,,,,,Indicadores de rendimiento para acciones de acceso abierto,http://eprints.rclis.org/15376/1/indicadores_redimientoOAI.pdf
 ,,,,,IRALIS: International Registry for Authors - Links to Identify Scientists Benefits for Spanish scholars and academia,http://eprints.rclis.org/15527/1/iralis-online-2008-version-2-fp.pdf
-,,,,,Normalización de la información: la aportación de IraLIS,http://eprints.rclis.org/12804/1/Articulo-IraLIS.pdf
+,,,,,Normalizaci?n de la informaci?n: la aportaci?n de IraLIS,http://eprints.rclis.org/12804/1/Articulo-IraLIS.pdf
 ,,,,,\"Impact of OAI protocol in Spain, Portugal and Latin America\",http://eprints.rclis.org/13246/1/Peset_Ferrer_Baiget_A1.pdf
 ,,,,,Interoperatividad entre repositorios y proveedores de servicios,http://eprints.rclis.org/8280/1/zaragoza_para_elis.pdf
-,,,,,Normalización de la firma de autores por disciplina en repositorios catalanes: una aproximación estadística,http://eprints.rclis.org/13767/1/Normalizaci%C3%B3n_de_la_firma_de_autores_por_disciplina_en_repositorios_catalanes%2C_una_aproximaci%C3%B3n_estad%C3%ADstica.pdf
-,,,,,Implantación del protocolo Open Archives Initiative-Protocol for Metadata Harvesting en España,http://eprints.rclis.org/12724/1/poster_online.pdf
-,,,,,Organización de la información artística en entornos hipertexto e hipermedia,http://eprints.rclis.org/388/1/intermediafpeset.pdf
-,,,,,Aula virtual de prevención de riesgos,http://eprints.rclis.org/5673/1/riesgos.pdf
-,,,,,Implantación de la Open Archives Initiative en España,http://eprints.rclis.org/15432/1/Implantaci%C3%B3n_de_la_Open_Arc_pub_2008.pdf
-,,,,,Entrevista a Tomàs Baiget,http://eprints.rclis.org/14022/1/entrevista_tomas_s1995-05-01.pdf
-,,,,,El proyecto WinEcs: una visión práctica para la implantación de bibliotecas digitales,http://eprints.rclis.org/386/1/ISKO.pdf
+,,,,,Normalizaci?n de la firma de autores por disciplina en repositorios catalanes: una aproximaci?n estad?stica,http://eprints.rclis.org/13767/1/Normalizaci%C3%B3n_de_la_firma_de_autores_por_disciplina_en_repositorios_catalanes%2C_una_aproximaci%C3%B3n_estad%C3%ADstica.pdf
+,,,,,Implantaci?n del protocolo Open Archives Initiative-Protocol for Metadata Harvesting en Espa?a,http://eprints.rclis.org/12724/1/poster_online.pdf
+,,,,,Organizaci?n de la informaci?n art?stica en entornos hipertexto e hipermedia,http://eprints.rclis.org/388/1/intermediafpeset.pdf
+,,,,,Aula virtual de prevenci?n de riesgos,http://eprints.rclis.org/5673/1/riesgos.pdf
+,,,,,Implantaci?n de la Open Archives Initiative en Espa?a,http://eprints.rclis.org/15432/1/Implantaci%C3%B3n_de_la_Open_Arc_pub_2008.pdf
+,,,,,Entrevista a Tom?s Baiget,http://eprints.rclis.org/14022/1/entrevista_tomas_s1995-05-01.pdf
+,,,,,El proyecto WinEcs: una visi?n pr?ctica para la implantaci?n de bibliotecas digitales,http://eprints.rclis.org/386/1/ISKO.pdf
 ,,,,,E-LIS : Central repository on Library and Information Science,http://eprints.rclis.org/15526/1/ELIS-Online-Meeting.pdf
-,,,,,Tendencias internacionales en el acceso libre a la documentación científica digital : OAI-Open Archives Initiative,http://eprints.rclis.org/4131/1/ortin_y_peset.pdf
+,,,,,Tendencias internacionales en el acceso libre a la documentaci?n cient?fica digital : OAI-Open Archives Initiative,http://eprints.rclis.org/4131/1/ortin_y_peset.pdf
 ,,,,,Scientific publishing in the European research area,http://eprints.rclis.org/14565/1/scientific_publication_v6u311414188676x.pdf
-,,,,,El mapa de lectura pública valenciana : un instrumento de trabajo y planificación,http://eprints.rclis.org/3914/1/com_383.pdf
-,,,,,Evolución social y networking en la comunidad biblio-documental,http://eprints.rclis.org/15200/1/Networking.pdf
+,,,,,El mapa de lectura p?blica valenciana : un instrumento de trabajo y planificaci?n,http://eprints.rclis.org/3914/1/com_383.pdf
+,,,,,Evoluci?n social y networking en la comunidad biblio-documental,http://eprints.rclis.org/15200/1/Networking.pdf
 ,,,,,E-LIS: una comunidad internacional de profesionales,http://eprints.rclis.org/12580/1/ELIS-meeting-Valencia-Peset.pdf
-,,,,,Recursos de información distribuidos en red: contenidos digitales para unidades documentales de arte en España,http://eprints.rclis.org/390/1/arte.pdf
-,,,,,Red española de trabajos científicos : estudio de viabilidad de la implantación de una biblioteca digital y análisis de sus derechos de autor,http://eprints.rclis.org/3172/1/EA20020085.PDF
+,,,,,Recursos de informaci?n distribuidos en red: contenidos digitales para unidades documentales de arte en Espa?a,http://eprints.rclis.org/390/1/arte.pdf
+,,,,,Red espa?ola de trabajos cient?ficos : estudio de viabilidad de la implantaci?n de una biblioteca digital y an?lisis de sus derechos de autor,http://eprints.rclis.org/3172/1/EA20020085.PDF
 ,,,,,Authority records for author's names in Library and Information Science,http://eprints.rclis.org/9601/1/OAI5-poster-18-03-07_v2.jpg
 ,,,,,\"Bibliotecas digitales en Internet de libro raro, antiguo e incunables\",http://eprints.rclis.org/387/1/%C3%ADncunables.pdf
-,,,,,\"“El aprendizaje desde la práctica\"\". Integración de nuevas metodologías docentes en la Licenciatura de Documentación de la Universidad Politécnica de Valencia\",http://eprints.rclis.org/385/1/PESET_FERRER.pdf
-,,,,,Desarrollo de una Biblioteca Digital como herramienta de apoyo a la Formación a Distancia aplicada a las normas ISO 9000,http://eprints.rclis.org/5674/1/comunicacion.pdf
+,,,,,\"?El aprendizaje desde la pr?ctica\"\". Integraci?n de nuevas metodolog?as docentes en la Licenciatura de Documentaci?n de la Universidad Polit?cnica de Valencia\",http://eprints.rclis.org/385/1/PESET_FERRER.pdf
+,,,,,Desarrollo de una Biblioteca Digital como herramienta de apoyo a la Formaci?n a Distancia aplicada a las normas ISO 9000,http://eprints.rclis.org/5674/1/comunicacion.pdf
 ,,,,,\"Use of OAI protocol and its impact in digital libraries: a case study in Spain, Portugal and Latin America\",http://eprints.rclis.org/10931/1/OAI-in-Spain-etc_p51_fernanda_ferrer_imma.pdf
-,,,,,CVN: normalización de los currículos científicos,http://eprints.rclis.org/14563/1/FINAL_g644787878lvw000.pdf
-,,,,,Biblioteca de Sociales (algo más que un edificio),http://eprints.rclis.org/1533/1/1999-28-34.pdf
-,,,,,\"Biblioteca Digital de Recursos de Información, complemento al Portal de Matemáticas de la Escuela de Caminos de la Universidad Politécnica de Valencia\",http://eprints.rclis.org/5671/1/calt.pdf
-,,,,,\"Catalogación sí, pero, ¿cómo?\",http://eprints.rclis.org/14564/1/catalogacion_thinkepi.pdf
+,,,,,CVN: normalizaci?n de los curr?culos cient?ficos,http://eprints.rclis.org/14563/1/FINAL_g644787878lvw000.pdf
+,,,,,Biblioteca de Sociales (algo m?s que un edificio),http://eprints.rclis.org/1533/1/1999-28-34.pdf
+,,,,,\"Biblioteca Digital de Recursos de Informaci?n, complemento al Portal de Matem?ticas de la Escuela de Caminos de la Universidad Polit?cnica de Valencia\",http://eprints.rclis.org/5671/1/calt.pdf
+,,,,,\"Catalogaci?n s?, pero, ?c?mo?\",http://eprints.rclis.org/14564/1/catalogacion_thinkepi.pdf
 ,,,,,Dspace and the standardization of the information: names of Spanish authors,http://eprints.rclis.org/12722/1/Microsoft_PowerPoint_-_Dspace_and_the_standardization_of_the_informationFINALA4.pdf
 info:lib:am:2008-02-24:jim_pitman,Person,Jim Pitman,http://www.stat.berkeley.edu/~pitman/,http://authorclaim.org/profile/ppi1/,Some Properties of the Arc Sine Law Related to Its Invariance Under a Family of Rational Maps,http://citeseer.ist.psu.edu/186189.html
 ,,,,,Some Developments of the Blackwell-MacQueen Urn Scheme,http://citeseer.ist.psu.edu/419261.html
@@ -591,7 +591,7 @@ info:lib:am:2008-02-24:jim_pitman,Person,Jim Pitman,http://www.stat.berkeley.edu
 ,,,,,\"Algebraic evaluations of some Euler integrals, duplication formulae for Appell's hypergeometric function\",http://citeseer.ist.psu.edu/160399.html
 ,,,,,Path Transformations of First Passage Bridges,http://citeseer.ist.psu.edu/676349.html
 ,,,,,\"Algebraic evaluations of some Euler integrals, duplication formulae for Appell's hypergeometric function F 1 , and Brownian variations\",http://citeseer.ist.psu.edu/157755.html
-,,,,,\"The exploration process of inhomogeneous continuum random trees, and an extension of Jeulin’s local time identity\",
+,,,,,\"The exploration process of inhomogeneous continuum random trees, and an extension of Jeulin?s local time identity\",
 ,,,,,Some probabilistic aspects of set partitions,
 ,,,,,Path transformations of first passage bridges,
 ,,,,,\"Markovian bridges: Construction, Palm interpretation, and splicing\",
@@ -626,7 +626,7 @@ info:lib:am:2008-02-24:jim_pitman,Person,Jim Pitman,http://www.stat.berkeley.edu
 ,,,,,Coalescents with multiple collisions,
 ,,,,,Wall and Siegmund duality relations for birth and death chains with reflecting barrier,
 ,,,,,Cyclically stationary Brownian local time processes,
-,,,,,\"Algebraic evaluations of some Euler integrals, duplication formulae for Appell’s hypergeometric function $F_1$ and Brownian variations\",
+,,,,,\"Algebraic evaluations of some Euler integrals, duplication formulae for Appell?s hypergeometric function $F_1$ and Brownian variations\",
 ,,,,,Uniform rates of convergence for Markov chain transition probabilities,
 ,,,,,A decomposition of Bessel bridges,
 ,,,,,Weak convergence of random P-mappings and the exploration process of inhomogeneous continuum random trees,
@@ -639,7 +639,7 @@ info:lib:am:2008-02-24:jim_pitman,Person,Jim Pitman,http://www.stat.berkeley.edu
 ,,,,,\"Birth, death and conditioning of Markov chains\",
 info:lib:am:1998-10-24:christina_k_pikas,Person,Christina K. Pikas,http://christinaslibraryrant.blogspot.com,http://authorclaim.org/profile/ppi2/,,
 info:lib:am:1970-03-16:arun_meda_sannuti,Person,Arun Meda Sannuti,,http://authorclaim.org/profile/psa1/,,
-info:lib:am:1972-11-18:julio_santillan_aldana,Person,Julio Santillán Aldana,http://www.santillanaldana.com,http://authorclaim.org/profile/psa2/,,
+info:lib:am:1972-11-18:julio_santillan_aldana,Person,Julio Santill?n Aldana,http://www.santillanaldana.com,http://authorclaim.org/profile/psa2/,,
 info:lib:am:2009-04-29:arthur_paul_smith,Person,Arthur Paul Smith,,http://authorclaim.org/profile/psm1/,Proof of the Atmospheric Greenhouse Effect,http://arxiv.org/abs/0802.4324
 ,,,,,Optical properties of the vibrations in charged C$_{60}$ molecules,http://arxiv.org/abs/cond-mat/9512020
 info:lib:am:2009-06-26:arnold_ben_wagner,Person,Arnold Ben Wagner,http://libweb.lib.buffalo.edu/staff/index.asp?ID=33,http://authorclaim.org/profile/pwa1/,SciFinder Scholar 2006: an empirical analysis of research topic query processing.,http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=retrieve&list_uids=16563008
@@ -700,31 +700,29 @@ prefURL,http://purl.org/ontology/bibo/uri
 Person,http://xmlns.com/foaf/0.1/Person
 ";
 
-	$parser = new CommonParser($csvFile);
-	
-	if(!$parser->getErrors())
-	{
-		echo "<h2>CSV Records</h2>";
-		
-		var_dump($parser->getCsvRecords());
-	
-		echo "<h2>Common Records</h2>";
-		
-		var_dump($parser->getCommonRecords());
-	
-		echo "<h2>Linkage Schema</h2>";
-		
-		var_dump($parser->getLinkageSchema());
-	
-	}
-	else
-	{
-		echo "<h2>Parsing Errors</h2>";
-		
-		foreach($parser->getErrors() as $key => $error)
-		{
-			echo $key.". ".$error."<br />";
-		}
-	}
+$parser = new CommonParser($csvFile);
 
+if(!$parser->getErrors())
+{
+  echo "<h2>CSV Records</h2>";
+
+  var_dump($parser->getCsvRecords());
+
+  echo "<h2>Common Records</h2>";
+
+  var_dump($parser->getCommonRecords());
+
+  echo "<h2>Linkage Schema</h2>";
+
+  var_dump($parser->getLinkageSchema());
+}
+else
+{
+  echo "<h2>Parsing Errors</h2>";
+
+  foreach($parser->getErrors() as $key => $error)
+  {
+    echo $key . ". " . $error . "<br />";
+  }
+}
 ?>
