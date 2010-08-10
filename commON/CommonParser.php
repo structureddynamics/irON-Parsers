@@ -83,7 +83,7 @@ class CommonParser
   /*! @brief All CSV records extracted from the CSV file */
   private $csvRecords = array();
 
-/*! @page internalDataStructures Internal Data Structures used by the commON Parser
+  /*! @page internalDataStructures Internal Data Structures used by the commON Parser
  
    @section CommonParserInternalParsedRecordsStructure Common Parser Internal Parsed Records Structure
    
@@ -267,8 +267,11 @@ class CommonParser
   /*! @brief Array describing the linkage schema (if defined) of a commON file */
   private $commonLinkageSchema = array();
 
-  /*! @brief Parsing errors stack */
-  private $errors = array();
+  /*! @brief CSV Parsing errors stack */
+  private $csvErrors = array();
+  
+  /*! @brief commON Validation errors stack */
+  private $commonErrors = array();
 
   /*!   @brief Constructor. It takes the commON CSV file content as input.
               
@@ -334,7 +337,7 @@ class CommonParser
   */
   public function getLinkageSchema() { return ($this->commonLinkageSchema); }
 
-  /*!   @brief Check for errors
+  /*!   @brief Check for CSV parsing errors
               
       \n
       
@@ -344,14 +347,34 @@ class CommonParser
     
       \n\n\n
   */
-  public function getErrors()
+  public function getCsvErrors()
   {
-    if(count($this->errors) == 0)
+    if(count($this->csvErrors) == 0)
     {
       return (FALSE);
     }
 
-    return ($this->errors);
+    return ($this->csvErrors);
+  }
+
+  /*!   @brief Check for commON parsing errors
+              
+      \n
+      
+      @return Return FALSE if no errors; returns an array of error messages if any.
+      
+      @author Frederick Giasson, Structured Dynamics LLC.
+    
+      \n\n\n
+  */
+  public function getCommonErrors()
+  {
+    if(count($this->commonErrors) == 0)
+    {
+      return (FALSE);
+    }
+
+    return ($this->commonErrors);
   }
 
   /*!   @brief Parse a CSV files to produce the structure used by the commonParser function.
@@ -431,7 +454,7 @@ class CommonParser
             if(($this->content[$i + 1] != "," && ($this->content[$i + 1] == " " && $this->content[$i + 2] != ","))
               && ($this->content[$i + 1] != "\r" && ($this->content[$i + 1] == " " && $this->content[$i + 2] != "\r")))
             {
-              array_push($this->errors,
+              array_push($this->csvErrors,
                 "CSV parser: A comma or a return carrier is expected after an un-escaped double quotes.");
               return;
             }
@@ -508,7 +531,7 @@ class CommonParser
             }
             else
             {
-              array_push($this->errors, "CSV parser: An un-escaped double quote has been detected.");
+              array_push($this->csvErrors, "CSV parser: An un-escaped double quote has been detected.");
               return;
             }
           }
@@ -521,7 +544,7 @@ class CommonParser
             }
             else
             {
-              array_push($this->errors, "CSV parser: An un-escaped double quote has been detected (around: '... "
+              array_push($this->csvErrors, "CSV parser: An un-escaped double quote has been detected (around: '... "
                 . str_replace(array ("\n", "\r"), " ", substr($this->content, $i - 5, 10)) . " ... (char #$i)').");
               return;
             }
@@ -624,7 +647,7 @@ class CommonParser
               }
               else
               {
-                array_push($this->errors,
+                array_push($this->commonErrors,
                   "commON Parser: A record structure property has been defined without starting with '&' ($property)");
                 return;
               }
@@ -647,7 +670,7 @@ class CommonParser
 
           if(count($recordStructure) <= 0)
           {
-            array_push($this->errors, "commON Parser: No properties defined for this record structure");
+            array_push($this->commonErrors, "commON Parser: No properties defined for this record structure");
             return;
           }
 
@@ -671,7 +694,7 @@ class CommonParser
 
               if(count($recordStructure) < count($record))
               {
-                array_push($this->errors,
+                array_push($this->commonErrors,
                   "commON Parser: Too many properties defined for the record according to the record structure");
                 return;
               }
@@ -801,7 +824,7 @@ class CommonParser
 
                 if(count($recordStructure) < count($record))
                 {
-                  array_push($this->errors,
+                  array_push($this->commonErrors,
                     "commON Parser: Too many properties defined for the record according to the linkage schema record structure");
                   return;
                 }
@@ -864,7 +887,7 @@ class CommonParser
 
                 if(count($recordStructure) < count($record))
                 {
-                  array_push($this->errors,
+                  array_push($this->commonErrors,
                     "commON Parser: Too many properties defined for the record according to the linkage schema record structure");
                   return;
                 }
@@ -904,7 +927,7 @@ class CommonParser
 
                 if(count($recordStructure) < count($record))
                 {
-                  array_push($this->errors,
+                  array_push($this->commonErrors,
                     "commON Parser: Too many properties defined for the record according to the linkage schema record structure");
                   return;
                 }
