@@ -16,7 +16,6 @@
             
     \n
 
-    @todo Implementing the "&&dataset" processing keyword
     @todo Implementing the "metaFile" keyword
     @todo Implementing the structure Schema & "schema" keyword
     @todo Implementing the "listSeparator" keyword
@@ -267,6 +266,9 @@ class CommonParser
   /*! @brief Array describing the linkage schema (if defined) of a commON file */
   private $commonLinkageSchema = array();
 
+  /*! @brief Array describing the dataset */
+  private $commonDataset = array();
+
   /*! @brief CSV Parsing errors stack */
   private $csvErrors = array();
   
@@ -336,6 +338,18 @@ class CommonParser
       \n\n\n
   */
   public function getLinkageSchema() { return ($this->commonLinkageSchema); }
+
+  /*!   @brief Returns the array of the parsed dataset.
+              
+      \n
+      
+      @return returns an array of the parsed dataset
+      
+      @author Frederick Giasson, Structured Dynamics LLC.
+    
+      \n\n\n
+  */
+  public function getDataset() { return ($this->dataset); }
 
   /*!   @brief Check for CSV parsing errors
               
@@ -455,7 +469,7 @@ class CommonParser
               && ($this->content[$i + 1] != "\r" && ($this->content[$i + 1] == " " && $this->content[$i + 2] != "\r")))
             {
               array_push($this->csvErrors,
-                "CSV parser: A comma or a return carrier is expected after an un-escaped double quotes.");
+                "CSV parser (001): A comma or a return carrier is expected after an un-escaped double quotes.");
               return;
             }
           }
@@ -531,7 +545,7 @@ class CommonParser
             }
             else
             {
-              array_push($this->csvErrors, "CSV parser: An un-escaped double quote has been detected.");
+              array_push($this->csvErrors, "CSV parser (002): An un-escaped double quote has been detected.");
               return;
             }
           }
@@ -544,7 +558,7 @@ class CommonParser
             }
             else
             {
-              array_push($this->csvErrors, "CSV parser: An un-escaped double quote has been detected (around: '... "
+              array_push($this->csvErrors, "CSV parser (003): An un-escaped double quote has been detected (around: '... "
                 . str_replace(array ("\n", "\r"), " ", substr($this->content, $i - 5, 10)) . " ... (char #$i)').");
               return;
             }
@@ -612,6 +626,7 @@ class CommonParser
 
           case "&&dataset":
             $currentSection = "dataset";
+            $shouldBeRecordDescription = TRUE;
           break;
 
           case "&&linkage":
@@ -648,7 +663,7 @@ class CommonParser
               else
               {
                 array_push($this->commonErrors,
-                  "commON Parser: A record structure property has been defined without starting with '&' ($property)");
+                  "commON Parser (001): A record structure property has been defined without starting with '&' ($property)");
                 return;
               }
             }
@@ -670,7 +685,7 @@ class CommonParser
 
           if(count($recordStructure) <= 0)
           {
-            array_push($this->commonErrors, "commON Parser: No properties defined for this record structure");
+            array_push($this->commonErrors, "commON Parser (002): No properties defined for this record structure");
             return;
           }
 
@@ -681,6 +696,113 @@ class CommonParser
           // Depending on the processing section, we populate different parsing structures
           switch($currentSection)
           {
+            // We are parsing the dataset description
+            case "dataset":
+              if(count($recordStructure) > count($record))
+              {
+                // Pad the record with empty properties values
+                for($i = 0; $i < (count($recordStructure) - count($record)); $i++)
+                {
+                  array_push($record, "");
+                }
+              }
+
+              if(count($recordStructure) < count($record))
+              {
+                array_push($this->commonErrors,
+                  "commON Parser (003): Too many properties defined for the record according to the record structure.
+                   Please make sure that you don't have empty cells in ending columns for your records, that are
+                   not defined in the attribute definition line.");
+                return;
+              }
+
+              foreach($recordStructure as $key => $rs)
+              {
+                // We simply skip empty recordStructure columns.
+                if($rs == "")
+                {
+                  continue;
+                }
+
+                if($rs == "&id")
+                {
+                  // Set the ID
+                  $this->dataset["&id"] = array(array ("value" => $record[$key], "reify" => "") );
+                }
+                
+                // Check if it is a reification attribute
+                elseif(($reifiedAttribute = $this->getReifiedAttribute($rs)) !== FALSE)
+                {
+                  if(isset($this->dataset[$reifiedAttribute["attribute"]]))
+                  {
+                    if(strpos($record[$key], "|") === FALSE)
+                    {
+                      $reificationStatementId = count($this->dataset[$reifiedAttribute["attribute"]]) - 1;
+
+                      if($record[$key] != "")
+                      {
+                        if(is_array($this->dataset[$reifiedAttribute["attribute"]][$reificationStatementId]["reify"]))
+                        {
+                          array_push($this->dataset[$reifiedAttribute["attribute"]][$reificationStatementId]["reify"][
+                                       $reifiedAttribute["reifiedAttribute"]], $record[$key]);
+                        }
+                        else
+                        {
+                          $this->dataset[$reifiedAttribute["attribute"]][$reificationStatementId]["reify"][
+                            $reifiedAttribute["reifiedAttribute"]] = array( $record[$key] );
+                        }
+                      }
+                    }
+                    else
+                    {
+                      if(!is_array($this->dataset[$reifiedAttribute["attribute"]]["reify"]))
+                      {
+                        $this->dataset[$reifiedAttribute["attribute"]]["reify"] = array();
+                      }
+
+                      $vs = explode("|", $record[$key]);
+
+                      foreach($vs as $v)
+                      {
+                        array_push($this->dataset[$reifiedAttribute["attribute"]]["reify"], $v);
+                      }
+                    }
+                  }
+                }
+                else
+                {
+                  if(strpos($record[$key], "|") === FALSE)
+                  {
+                    if($record[$key] != "")
+                    {
+                      if(is_array($this->dataset[$rs]))
+                      {
+                        array_push($this->dataset[$rs], array ("value" => $record[$key], "reify" => ""));
+                      }
+                      else
+                      {
+                        $this->dataset[$rs] = array( array ("value" => $record[$key], "reify" => "") );
+                      }
+                    }
+                  }
+                  else
+                  {
+                    if(!is_array($this->dataset[$rs]))
+                    {
+                      $this->dataset[$rs] = array();
+                    }
+
+                    $vs = explode("|", $record[$key]);
+
+                    foreach($vs as $v)
+                    {
+                      array_push($this->dataset[$rs], array ("value" => $v, "reify" => ""));
+                    }
+                  }
+                }
+              }              
+            break;
+            
             // We are parsing a record.
             case "record":
               if(count($recordStructure) > count($record))
@@ -695,7 +817,9 @@ class CommonParser
               if(count($recordStructure) < count($record))
               {
                 array_push($this->commonErrors,
-                  "commON Parser: Too many properties defined for the record according to the record structure");
+                  "commON Parser (004): Too many properties defined for the record according to the record structure. 
+                   Please make sure that you don't have empty cells in ending columns for your records, that are
+                   not defined in the attribute definition line.");
                 return;
               }
 
@@ -825,7 +949,9 @@ class CommonParser
                 if(count($recordStructure) < count($record))
                 {
                   array_push($this->commonErrors,
-                    "commON Parser: Too many properties defined for the record according to the linkage schema record structure");
+                    "commON Parser (005): Too many properties defined for the record according to the linkage schema 
+                     record structure. Please make sure that you don't have empty cells in ending columns for your 
+                     records, that are not defined in the attribute definition line.");
                   return;
                 }
 
@@ -888,7 +1014,9 @@ class CommonParser
                 if(count($recordStructure) < count($record))
                 {
                   array_push($this->commonErrors,
-                    "commON Parser: Too many properties defined for the record according to the linkage schema record structure");
+                    "commON Parser (006): Too many properties defined for the record according to the linkage schema 
+                     record structure. Please make sure that you don't have empty cells in ending columns for your 
+                     records, that are not defined in the attribute definition line.");
                   return;
                 }
 
@@ -928,7 +1056,9 @@ class CommonParser
                 if(count($recordStructure) < count($record))
                 {
                   array_push($this->commonErrors,
-                    "commON Parser: Too many properties defined for the record according to the linkage schema record structure");
+                    "commON Parser (007): Too many properties defined for the record according to the linkage schema 
+                     record structure. Please make sure that you don't have empty cells in ending columns for your 
+                     records, that are not defined in the attribute definition line.");
                   return;
                 }
 
@@ -1136,9 +1266,10 @@ class CommonParser
               }
               else
               {
+                // The value is a literal
                 $n3 .= "<" . $recordId . "> <" . $p . "> \"\"\"" . $this->escapeN3($value["value"]) . "\"\"\" .\n";
               }                
-
+              
               // Check if there is some statements to reify
               if(is_array($value["reify"]))
               {
@@ -1154,17 +1285,18 @@ class CommonParser
                   {
                     $reiProperty = $baseOntology . substr($reifiedAttribute, 1, strlen($reifiedAttribute) - 1);
 
-                    // @TODO: Check if "@" or "@@"
-                    foreach($reiValues as $reiValue)
-                    {
-                      $n3ReificationStatements .= "_:" . md5($recordId . $p . $value["value"]) . " a rdf:Statement ;\n";
+                  
+                  // @TODO: Check if "@" or "@@"
+                  foreach($reiValues as $reiValue)
+                  {
+                    $n3ReificationStatements .= "_:" . md5($recordId . $p . $value["value"]) . " a rdf:Statement ;\n";
 
-                      $n3ReificationStatements .= "    rdf:subject <" . $recordId . "> ;\n";
-                      $n3ReificationStatements .= "    rdf:predicate <" . $p . "> ;\n";
-                      $n3ReificationStatements .= "    rdf:object \"\"\"" . $this->escapeN3($value["value"])
-                        . "\"\"\" ;\n";
-                      $n3ReificationStatements .= "    <" . $reiProperty . "> \"\"\"" . $this->escapeN3($reiValue)
-                        . "\"\"\" .\n\n";
+                    $n3ReificationStatements .= "    rdf:subject <" . $recordId . "> ;\n";
+                    $n3ReificationStatements .= "    rdf:predicate <" . $p . "> ;\n";
+                    $n3ReificationStatements .= "    rdf:object \"\"\"" . $this->escapeN3($value["value"])
+                      . "\"\"\" ;\n";
+                    $n3ReificationStatements .= "    <" . $reiProperty . "> \"\"\"" . $this->escapeN3($reiValue)
+                      . "\"\"\" .\n\n";
                     }
                   }
                   else
@@ -1205,7 +1337,7 @@ class CommonParser
   
     \n\n\n
 */
-  private function getLinkedProperty($targetAttribute)
+  public function getLinkedProperty($targetAttribute)
   {
     // Remve the processing character if it is present at the beginning of the attr
     if(substr($targetAttribute, 0, 1) == "&")
@@ -1240,7 +1372,7 @@ class CommonParser
   
     \n\n\n
 */
-  private function getLinkedType($targetType)
+  public function getLinkedType($targetType)
   {
     // Remve the processing character if it is present at the beginning of the attr
     if(substr($targetType, 0, 1) == "&")
