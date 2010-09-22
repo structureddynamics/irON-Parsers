@@ -1123,15 +1123,21 @@ class CommonParser
                 // If the attribute to be converted is not part of the linakge schema, then we
                 // simply create a "on-the-fly" attribute by using the $baseOntology URI.
                 $p = $baseOntology . substr($property, 1, strlen($property) - 1);
+              }
 
-                // @TODO: Check if "@" or "@@"
-                $n3 .= "<" . $recordId . "> <" . $p . "> \"\"\"" . $this->escapeN3($value["value"]) . "\"\"\" .\n";
+              if(substr($value["value"], 0, 1) == "@")
+              {
+                $n3 .= "<" . $recordId . "> <" . $p . "> <" . $baseInstance . substr($value["value"],1) . "> .\n";
+              }
+              // Check if the value is an external record reference
+              elseif(substr($value["value"], 0, 2) == "@@")
+              {
+                $n3 .= "<" . $recordId . "> <" . $p . "> <" . substr($value["value"],2) . "> .\n";
               }
               else
               {
-                // @TODO: Check if "@" or "@@"
                 $n3 .= "<" . $recordId . "> <" . $p . "> \"\"\"" . $this->escapeN3($value["value"]) . "\"\"\" .\n";
-              }
+              }                
 
               // Check if there is some statements to reify
               if(is_array($value["reify"]))
