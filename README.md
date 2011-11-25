@@ -24,18 +24,20 @@ Using the commON Parser
 
 Using the commON parser is quite simple. There is basically 3 main areas:
 
-# Creating the parser's object and parsing the commON document
-# Checking for parsing errors
-# Getting the parsed data into different formats
+* Creating the parser's object and parsing the commON document
+* Checking for parsing errors
+* Getting the parsed data into different formats
 
 The first thing to do is to create the commON's parser object with the commON file we want to parse:
 
 ```php
-  include_once("CommonParser.php");
+  <?php
+    include_once("CommonParser.php");
   
-  $commONFileContent = file_get_contents("/tmp/myCommonFile.csv");
+    $commONFileContent = file_get_contents("/tmp/myCommonFile.csv");
   
-  $parser = new CommonParser($commONFileContent);
+    $parser = new CommonParser($commONFileContent);
+  ?>
 ```
 
 The next thing to do is to check if the parser found any error into the commON file:
@@ -51,41 +53,46 @@ The next thing to do is to check if the parser found any error into the commON f
 
 If there are errors, then we can check what these errors are. There are two kind of errors:
 
-# Errors that come from the CSV file, according to the CSV specification
-# Errors that come from the commON format, according to the irON+commON specification
+* Errors that come from the CSV file, according to the CSV specification
+* Errors that come from the commON format, according to the irON+commON specification
 
 ```php
-  echo "<h2>Parsing Errors</h2>";
+  <?php
+    echo "<h2>Parsing Errors</h2>";
 
-  foreach($parser->getErrors() as $key => $error)
-  {
-    echo $key . ". " . $error . "<br />";
-  }
+    foreach($parser->getErrors() as $key => $error)
+    {
+      echo $key . ". " . $error . "<br />";
+    }
+  ?>
 ```
 
 If there is no errors, then we can output the parsed records in different formats:
 
 ```php
-  echo "<h2>CSV Records</h2>";
+  <?php
+    echo "<h2>CSV Records</h2>";
 
-  var_dump($parser->getCsvRecords());
+    var_dump($parser->getCsvRecords());
 
-  echo "<h2>Common Records</h2>";
+    echo "<h2>Common Records</h2>";
 
-  var_dump($parser->getCommonRecords());
+    var_dump($parser->getCommonRecords());
 
-  echo "<h2>Linkage Schema</h2>";
+    echo "<h2>Linkage Schema</h2>";
 
-  var_dump($parser->getLinkageSchema());
+    var_dump($parser->getLinkageSchema());
   
-  echo "<h2>RDF+N3 FIle</h2>";
+    echo "<h2>RDF+N3 FIle</h2>";
 
-  var_dump($parser->getRdfN3());
+    var_dump($parser->getRdfN3());
+  ?>
 ```
 
 There is the complete example:
 
 ```php
+<?php
   include_once("CommonParser.php");
   
   $commONFileContent = file_get_contents("/tmp/myCommonFile.csv");
@@ -119,6 +126,7 @@ There is the complete example:
       echo $key . ". " . $error . "<br />";
     }
   }
+?> 
 ```
 
 Some Data Structures
@@ -302,4 +310,111 @@ If you are using the API <code>getCommonLinkageSchema()</code>, the returned res
     
     )
     ...
+```
+
+Using the irJSON Parser
+=======================
+
+sing the commON parser is quite simple. There is basically 3 main areas:
+
+* Creating the parser's object and parsing the commON document
+* Checking for parsing errors
+* Getting the parsed data into different formats
+
+The first thing to do is to create the commON's parser object with the commON file we want to parse:
+
+```php
+  <?php
+	include_once("Dataset.php");
+	include_once("InstanceRecord.php");
+	include_once("LinkageSchema.php");
+	include_once("StructureSchema.php");
+	include_once("irJSONParser.php");
+  
+    $irJSONFileContent = file_get_contents("/tmp/myIrJSONFile.csv");
+  
+    $parser = new irJSONParser($irJSONFileContent);
+  ?>
+```
+
+The next thing to do is to check if the parser found any error into the commON file:
+
+```php
+  <?php
+    if(count($parser->jsonErrors) > 0)
+    {
+      echo "There are JSON errors!";
+	} 
+	
+    if(count($parser->irjsonErrors) > 0)
+    {
+      echo "There are irJSON errors!";
+	} 
+	
+    if(count($parser->irjsonNotices) > 0)
+    {
+      echo "There are irJSON notices!";
+	} 
+  ?>
+```
+
+If there are errors, then we can check what these errors are. There are two kind of errors:
+
+* Errors that come from the JSON file, according to the JSON specification
+* Errors that come from the irJSON format, according to the irON+irJSON specification
+* irJSON Notices
+
+```php
+  <?php
+    echo "<h2>Parsing Errors</h2>";
+
+    foreach($parser->jsonErrors as $error)
+    {
+      echo "$error\n";
+    }
+	
+    foreach($parser->irjsonErrors as $error)
+    {
+      echo "$error\n";
+    }
+
+	foreach($parser->irjsonNotices as $notice)
+    {
+      echo "$notice\n";
+    }
+  ?>
+```
+
+If there is no errors, then we can output the parsed records in different formats:
+
+```php
+  <?php
+	echo "<h2>Dataset description</h2>";
+
+	echo "<pre>";
+	var_dump($parser->dataset);
+
+	echo "</pre>";
+
+	echo "<h2>Linkage Schema description</h2>";
+
+	echo "<pre>";
+	var_dump($parser->linkageSchemas);
+
+	echo "</pre>";
+
+	echo "<h2>Structure Schema description</h2>";
+
+	echo "<pre>";
+	var_dump($parser->structureSchemas);
+
+	echo "</pre>";
+
+	echo "<h2>Instance Records</h2>";
+
+	echo "<pre>";
+	var_dump($parser->instanceRecords);
+
+	echo "</pre>";
+  ?>
 ```
