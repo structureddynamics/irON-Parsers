@@ -1,3 +1,0 @@
-All versions changelogs are available on this website:
-
-http://community.openstructs.org/source-code/change-logs/commonparser/
