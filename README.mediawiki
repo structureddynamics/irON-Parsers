@@ -27,14 +27,13 @@ Using the commON parser is quite simple. There is basically 3 main areas:
 
 The first thing to do is to create the commON's parser object with the commON file we want to parse:
 
-{% highlight php %}
+```php
   include_once("CommonParser.php");
   
   $commONFileContent = file_get_contents("/tmp/myCommonFile.csv");
   
   $parser = new CommonParser($commONFileContent);
- 
-{% endhighlight %}
+```
 
 The next thing to do is to check if the parser found any error into the commON file:
 
