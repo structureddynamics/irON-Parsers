@@ -41,10 +41,12 @@ The first thing to do is to create the commON's parser object with the commON fi
 The next thing to do is to check if the parser found any error into the commON file:
 
 ```php
-  if($parser->getErrors())
-  {
-    echo "There are errors!";
-  } 
+  <?php
+    if($parser->getErrors())
+    {
+      echo "There are errors!";
+	} 
+  ?>
 ```
 
 If there are errors, then we can check what these errors are. There are two kind of errors:
