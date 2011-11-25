@@ -37,26 +37,26 @@ The first thing to do is to create the commON's parser object with the commON fi
 
 The next thing to do is to check if the parser found any error into the commON file:
 
-{% highlight php %}
+<pre>
   if($parser->getErrors())
   {
     echo "There are errors!";
   } 
-{% endhighlight %}
+</pre>
 
 If there are errors, then we can check what these errors are. There are two kind of errors:
 
 # Errors that come from the CSV file, according to the CSV specification
 # Errors that come from the commON format, according to the irON+commON specification
 
-{% highlight php %}
+<code>
   echo "<h2>Parsing Errors</h2>";
 
   foreach($parser->getErrors() as $key => $error)
   {
     echo $key . ". " . $error . "<br />";
   }
-{% endhighlight %}
+<code>
 
 If there is no errors, then we can output the parsed records in different formats:
 
