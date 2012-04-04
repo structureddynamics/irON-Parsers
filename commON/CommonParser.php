@@ -635,6 +635,8 @@ class CommonParser
           break;
 
           default:
+            array_push($this->commonErrors, "commON Parser: Unknown section $record[0]");
+          
             return ("Unknown section $record[0]");
           break;
         }
