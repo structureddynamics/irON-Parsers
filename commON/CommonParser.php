@@ -513,9 +513,12 @@ class CommonParser
           array_push($this->csvRecords, $record);
           $record = array();
 
-          if($this->content[$i] == "\r" && $this->content[$i + 1] == "\n")
+          if(isset($this->content[$i]) && isset($this->content[$i + 1]))
           {
-            $i++;
+            if($this->content[$i] == "\r" && $this->content[$i + 1] == "\n")
+            {
+              $i++;
+            }
           }
         }
         elseif($this->content[$i] == ",")
